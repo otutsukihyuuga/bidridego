@@ -6,41 +6,24 @@
     android:layout_height="match_parent"
     android:background="#2B005C"
     tools:context=".LoginActivity">
-
-
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="194dp"
-
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="340dp"
-        android:layout_marginTop="186dp"
         android:text="@string/Line"
         android:textSize="50sp" />
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="106dp"
-
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="288dp"
-        android:layout_marginTop="204dp"
         android:text="@string/OR"
         android:textSize="30sp" />
 
     <EditText
         android:id="@+id/emailEditText"
-        android:layout_width="370dp"
+        android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="133dp"
-        android:layout_marginTop="261dp"
         android:autofillHints="username"
         android:ems="10"
         android:hint="@string/Login"
@@ -49,25 +32,15 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="194dp"
-
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="186dp"
         android:text="@string/Line"
         android:textSize="50sp" />
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="370dp"
-        android:layout_height="64dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="143dp"
-        android:layout_marginTop="333dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:autofillHints="username"
         android:ems="10"
         android:hint="@string/Password"
@@ -76,8 +49,8 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="411dp"
-        android:layout_height="63dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
