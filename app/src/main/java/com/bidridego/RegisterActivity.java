@@ -31,7 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button register;
 
     private FirebaseAuth auth;
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private FirebaseDatabase firebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
         confirmPassword = findViewById(R.id.confirmPassword);
         register = findViewById(R.id.register);
 
+        firebaseDatabase = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
 
         register.setOnClickListener(new View.OnClickListener() {
