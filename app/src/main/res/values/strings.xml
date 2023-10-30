@@ -10,4 +10,14 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+<!--    activity_login-->
+    <string name="signUp">Sign Up</string>
+    <string name="emailAddress">Email Address</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="forgotPassword">Forgot Password</string>
+<!--    activity_home-->
+    <string name="register">Register</string>
+<!--    activity_register-->
 </resources>
