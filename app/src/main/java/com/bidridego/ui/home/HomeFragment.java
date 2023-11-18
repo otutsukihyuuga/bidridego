@@ -1,5 +1,7 @@
 package com.bidridego.ui.home;
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +21,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -70,6 +75,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private Marker destinationMarker;
     private Polyline routePolyline;
+    EditText date,time;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -85,6 +92,40 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         sourceEditText.setAdapter(sourceAdapter);
         destinationEditText.setAdapter(destinationAdapter);
+        date = rootView.findViewById(R.id.date);
+        time = rootView.findViewById(R.id.time);
+
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog dialog = new DatePickerDialog(mThis, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        date.setText(String.valueOf(dayOfMonth)+'/'+String.valueOf(month)+'/'+String.valueOf(year));
+                    }
+                }, 2023, 11, 11);
+                dialog.show();
+            }
+        });
+        time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog dialog = new TimePickerDialog(mThis, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String hr="", min="";
+                        if(hourOfDay<10)
+                            hr = "0";
+                        if(minute<10)
+                            min = "0";
+                        hr += String.valueOf(hourOfDay);
+                        min += String.valueOf(minute);
+                        time.setText(hr+":"+min);
+                    }
+                }, 0, 0, true);
+                dialog.show();
+            }
+        });
 
         // Add a TextChangedListener to fetch suggestions as the user types
         sourceEditText.addTextChangedListener(new TextWatcher() {
