@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -15,8 +18,11 @@
         android:theme="@style/Theme.Bidridego"
         tools:targetApi="31" >
         <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB4a-cPEPuPYBvNhxFXjEd4Pjtn6x4jXdo" />
+            android:value="${MAPS_API_KEY}" />
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
