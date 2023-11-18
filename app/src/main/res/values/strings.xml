@@ -20,5 +20,6 @@
 <!--    activity_home-->
     <string name="register">Register</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="maps_api_key">"AIzaSyB4a-cPEPuPYBvNhxFXjEd4Pjtn6x4jXdo"</string>
 <!--    activity_register-->
 </resources>
