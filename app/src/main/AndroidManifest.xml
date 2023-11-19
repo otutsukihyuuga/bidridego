@@ -25,9 +25,11 @@
             android:value="${MAPS_API_KEY}" />
         <activity
             android:name=".LoginActivity"
+            android:parentActivityName=".HomeActivity"
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
+            android:parentActivityName=".HomeActivity"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
@@ -42,6 +44,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
+            android:parentActivityName=".HomeActivity"
             android:theme="@style/Theme.Bidridego.NoActionBar" />
     </application>
 

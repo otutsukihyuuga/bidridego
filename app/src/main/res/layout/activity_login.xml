@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#2B005C">
@@ -41,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_menu_camera" />
+                    android:src="@drawable/email"/>
 
                 <EditText
                     android:id="@+id/email"
@@ -60,12 +61,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_menu_camera" />
+                    android:src="@drawable/password"/>
 
                 <EditText
                     android:id="@+id/password"
                     style="@style/editText"
-                    android:hint="@string/password" />
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
             </LinearLayout>
 
             <Button
@@ -76,7 +78,8 @@
             <Button
                 style="@style/button"
                 android:text="@string/forgotPassword"
-                android:background="@color/golden"
+                app:backgroundTint="@color/golden"
+                android:textColor="@color/blue"
                 android:layout_marginTop="0dp"/>
         </LinearLayout>
 
