@@ -10,6 +10,11 @@
         android:name="com.bidridego.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/nav_trip_list"
+        android:name="com.bidridego.ui.driver.DriverTripsListFragment"
+        android:label="@string/driver_trips"
+        tools:layout="@layout/recyclerview_list" />
 
     <fragment
         android:id="@+id/nav_gallery"
