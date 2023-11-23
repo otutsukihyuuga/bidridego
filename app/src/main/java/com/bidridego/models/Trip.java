@@ -1,47 +1,120 @@
-package com.bidridego.models;public class Trip {
-    private double cost;
-    private String destination;
-    private String source;
-    private double distance;
+package com.bidridego.models;
 
-    public Trip(double cost, String destination, String source, double distance) {
+public class Trip {
+    public Trip(String id, double cost, BidRideLocation to, BidRideLocation from, double distance, String postedBy, int passengers, String date, String time, boolean isCarPool, String rideType) {
+        this.id = id;
         this.cost = cost;
-        this.destination = destination;
-        this.source = source;
+        this.to = to;
+        this.from = from;
         this.distance = distance;
+        this.postedBy = postedBy;
+        this.passengers = passengers;
+        this.date = date;
+        this.time = time;
+        this.isCarPool = isCarPool;
+        this.rideType = rideType;
     }
 
     public Trip(){}
 
+    private String id;
+    private double cost;
+    private BidRideLocation from;
+    private BidRideLocation to;
+    private double distance;
+    private String postedBy;
+    private int passengers;
+
+    private String date;
+    private String time;
+    private boolean isCarPool;
+    private String rideType;
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public double getCost() {
-        return cost;
+        return this.cost;
     }
 
     public void setCost(double cost) {
         this.cost = cost;
     }
 
-    public String getDestination() {
-        return destination;
+    public BidRideLocation getFrom() {
+        return this.from;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setFrom(BidRideLocation from) {
+        this.from = from;
     }
 
-    public String getSource() {
-        return source;
+    public BidRideLocation getTo() {
+        return this.to;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setTo(BidRideLocation to) {
+        this.to = to;
     }
 
     public double getDistance() {
-        return distance;
+        return this.distance;
     }
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public String getPostedBy() {
+        return this.postedBy;
+    }
+
+    public void setPostedBy(String postedBy) {
+        this.postedBy = postedBy;
+    }
+
+    public int getPassengers() {
+        return this.passengers;
+    }
+
+    public void setPassengers(int passengers) {
+        this.passengers = passengers;
+    }
+
+    public String getDate() {
+        return this.date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return this.time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public boolean isCarPool() {
+        return this.isCarPool;
+    }
+
+    public void setCarPool(boolean carPool) {
+        this.isCarPool = carPool;
+    }
+
+    public String getRideType() {
+        return this.rideType;
+    }
+
+    public void setRideType(String rideType) {
+        this.rideType = rideType;
     }
 }

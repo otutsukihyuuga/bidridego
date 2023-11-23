@@ -43,8 +43,10 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
         TextView distance = tripViewHolder.distance;
 
         cost.setText("" + tripList.get(listPosition).getCost());
-        destination.setText(tripList.get(listPosition).getDestination());
-        source.setText(tripList.get(listPosition).getSource());
+                destination.setText("tripList.get(listPosition).getDestination()");
+        source.setText("tripList.get(listPosition).getSource()");
+//        destination.setText(tripList.get(listPosition).getDestination());
+//        source.setText(tripList.get(listPosition).getSource());
         distance.setText("" + tripList.get(listPosition).getDistance());
     }
 }
