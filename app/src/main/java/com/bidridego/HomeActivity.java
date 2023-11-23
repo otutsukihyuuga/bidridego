@@ -38,7 +38,6 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this , RegisterActivity.class));
-                finish();
             }
         });
 
@@ -46,7 +45,6 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(HomeActivity.this , LoginActivity.class));
-                finish();
             }
         });
         // Check if the user is already authenticated
