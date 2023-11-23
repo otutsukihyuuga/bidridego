@@ -91,10 +91,10 @@ public class HomeActivity extends AppCompatActivity {
         preferences = getSharedPreferences("BidRigeGo", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("registeredRole", role);
-        editor.putString("role", "user");
+        editor.putString("role", "driver");
 
         if(!preferences.contains("role")){
-            editor.putString("role", "user");
+            editor.putString("role", "driver");
         }
         editor.apply();
     }
@@ -106,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
         if ("driver".equals(userRole)) {
             intent = new Intent(HomeActivity.this, DriverMainActivity.class);
         } else {
-            intent = new Intent(HomeActivity.this, UserMainActivity.class);
+            intent = new Intent(HomeActivity.this, DriverMainActivity.class);
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

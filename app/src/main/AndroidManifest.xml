@@ -22,6 +22,9 @@
             android:exported="false"
             android:label="@string/title_driver_activity_main"
             android:theme="@style/Theme.Bidridego.NoActionBar" />
+        <activity
+            android:name=".BidDetails"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -32,12 +35,12 @@
 
         <activity
             android:name=".LoginActivity"
-            android:parentActivityName=".HomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".HomeActivity" />
         <activity
             android:name=".RegisterActivity"
-            android:parentActivityName=".HomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".HomeActivity" />
         <activity
             android:name=".HomeActivity"
             android:exported="true"
