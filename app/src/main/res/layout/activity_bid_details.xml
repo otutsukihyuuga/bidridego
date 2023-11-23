@@ -10,7 +10,7 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="571dp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/accept"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toStartOf="parent">
@@ -24,7 +24,7 @@
         android:background="@drawable/circular_button"
         android:text="-"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/_dynamic"
+        app:layout_constraintBottom_toBottomOf="@+id/listView"
         app:layout_constraintEnd_toStartOf="@+id/editTextText"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
@@ -36,13 +36,13 @@
         android:background="@drawable/circular_button"
         android:text="+"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/_dynamic"
+        app:layout_constraintBottom_toTopOf="@+id/accept"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/editTextText" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/accept"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Accept Bid"
@@ -56,7 +56,7 @@
         android:ems="10"
         android:inputType="text"
         android:text="Name"
-        app:layout_constraintBottom_toBottomOf="@+id/_dynamic"
+        app:layout_constraintBottom_toBottomOf="@+id/listView"
         app:layout_constraintEnd_toStartOf="@+id/button4"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button5" />
