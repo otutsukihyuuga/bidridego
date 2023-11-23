@@ -1,4 +1,4 @@
-package com.bidridego.ui.home;
+package com.bidridego.user;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;

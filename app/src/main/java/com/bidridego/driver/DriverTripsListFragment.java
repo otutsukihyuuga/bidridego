@@ -1,4 +1,4 @@
-package com.bidridego.ui.driver;
+package com.bidridego.driver;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,7 +28,7 @@ public class DriverTripsListFragment  extends Fragment {
         recyclerView = rootView.findViewById(R.id.recycler_id);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         tripArrayList = new ArrayList <>();
-
+        row_index = 0;
         while (row_index <= 200) {
             Trip aTrip = new Trip( 1, "abc", "def", 30);
             tripArrayList.add(aTrip) ;
