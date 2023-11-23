@@ -21,8 +21,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -33,6 +37,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bidridego.R;
+import com.bidridego.models.BidRideLocation;
+import com.bidridego.models.Trip;
+import com.bidridego.services.TripService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -44,6 +51,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.BufferedInputStream;
@@ -56,6 +65,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     SupportMapFragment mapFragment;
@@ -75,7 +86,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private Marker destinationMarker;
     private Polyline routePolyline;
-    EditText date,time;
+    private EditText date,time, cost, passengers;
+    private Switch isCarPool;
+    private Button rideNow;
+    private RadioGroup rideTypeRadioGroup;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -94,36 +108,184 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         destinationEditText.setAdapter(destinationAdapter);
         date = rootView.findViewById(R.id.date);
         time = rootView.findViewById(R.id.time);
+        cost = rootView.findViewById(R.id.cost);
+        passengers = rootView.findViewById(R.id.seats);
+        isCarPool = rootView.findViewById(R.id.is_car_pool);
+        rideTypeRadioGroup = rootView.findViewById(R.id.ride_type_radio_group);
+        rideNow = rootView.findViewById(R.id.ride_now);
+        rideNow.setEnabled(false);
+        Trip trip = new Trip();
+        trip.setCarPool(false);
+        trip.setPostedBy(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        AtomicBoolean isToSet = new AtomicBoolean(false);
+        AtomicBoolean isFromSet = new AtomicBoolean(false);
 
-        date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog dialog = new DatePickerDialog(mThis, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        date.setText(String.valueOf(dayOfMonth)+'/'+String.valueOf(month)+'/'+String.valueOf(year));
-                    }
-                }, 2023, 11, 11);
-                dialog.show();
+        rideNow.setOnClickListener(v -> {
+            TripService.getInstance().saveOrUpdate(trip);
+        });
+        rideTypeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton radioButton = rootView.findViewById(checkedId);
+            trip.setRideType(String.valueOf(radioButton.getText()));
+            isValidTrip(trip);
+        });
+
+        date.setOnClickListener(v -> {
+            DatePickerDialog dialog = new DatePickerDialog(mThis, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    date.setText(String.valueOf(dayOfMonth)+'/'+String.valueOf(month)+'/'+String.valueOf(year));
+                    trip.setDate(date.toString());
+                    isValidTrip(trip);
+                }
+            }, 2023, 11, 11);
+            dialog.show();
+        });
+
+        time.setOnClickListener(v -> {
+            TimePickerDialog dialog = new TimePickerDialog(mThis, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    String hr="", min="";
+                    if(hourOfDay<10)
+                        hr = "0";
+                    if(minute<10)
+                        min = "0";
+                    hr += String.valueOf(hourOfDay);
+                    min += String.valueOf(minute);
+                    time.setText(hr+":"+min);
+                    trip.setDate(time.toString());
+                    isValidTrip(trip);
+                }
+            }, 0, 0, true);
+            dialog.show();
+        });
+        isCarPool.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                trip.setCarPool(true);
+            } else {
+                trip.setCarPool(false);
             }
         });
-        time.setOnClickListener(new View.OnClickListener() {
+
+        // Add a TextChangedListener to fetch suggestions as the user types
+        sourceEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                TimePickerDialog dialog = new TimePickerDialog(mThis, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String hr="", min="";
-                        if(hourOfDay<10)
-                            hr = "0";
-                        if(minute<10)
-                            min = "0";
-                        hr += String.valueOf(hourOfDay);
-                        min += String.valueOf(minute);
-                        time.setText(hr+":"+min);
-                    }
-                }, 0, 0, true);
-                dialog.show();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Fetch suggestions as the user types
+                if(charSequence.toString().length() >= 3) {
+                    fetchLocationSuggestions(charSequence.toString(), true);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+        // Add a TextChangedListener to fetch suggestions as the user types
+        destinationEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Fetch suggestions as the user types
+                if(charSequence.toString().length() >= 3) {
+                    fetchLocationSuggestions(charSequence.toString(), false);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        sourceEditText.setOnItemClickListener((parent, view, position, id) -> {
+            // Get the selected item from the adapter
+            String selectedItem = (String) parent.getItemAtPosition(position);
+
+            // Use the geocoder to get the details (latitude, longitude) for the selected item
+            try {
+                List<Address> addresses = geocoder.getFromLocationName(selectedItem, 1);
+                if (addresses != null && addresses.size() > 0) {
+                    Address selectedAddress = addresses.get(0);
+                    double selectedLatitude = selectedAddress.getLatitude();
+                    double selectedLongitude = selectedAddress.getLongitude();
+
+                    // Now you have the name (selectedItem), latitude, and longitude
+                    showToast("Selected Location: " + selectedItem +
+                            "\nLatitude: " + selectedLatitude +
+                            "\nLongitude: " + selectedLongitude);
+                    BidRideLocation from = new BidRideLocation(selectedLatitude, selectedLongitude, selectedItem);
+                    trip.setFrom(from);
+                    isFromSet.set(true);
+                    if(isToSet.get()) trip.setDistance(distance(trip.getTo(), from));
+                    isValidTrip(trip);
+                    // Update the marker on the map with the selected location
+                    updateMarker(new LatLng(selectedLatitude, selectedLongitude), selectedItem, true);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        destinationEditText.setOnItemClickListener((parent, view, position, id) -> {
+            // Get the selected item from the adapter
+            String selectedItem = (String) parent.getItemAtPosition(position);
+
+            // Use the geocoder to get the details (latitude, longitude) for the selected item
+            try {
+                List<Address> addresses = geocoder.getFromLocationName(selectedItem, 1);
+                if (addresses != null && addresses.size() > 0) {
+                    Address selectedAddress = addresses.get(0);
+                    double selectedLatitude = selectedAddress.getLatitude();
+                    double selectedLongitude = selectedAddress.getLongitude();
+
+                    // Now you have the name (selectedItem), latitude, and longitude
+                    BidRideLocation to = new BidRideLocation(selectedLatitude, selectedLongitude, selectedItem);
+                    trip.setTo(to);
+                    isToSet.set(true);
+                    if(isFromSet.get()) trip.setDistance(distance(trip.getFrom(), to));
+                    isValidTrip(trip);
+                    showToast("Selected Location: " + selectedItem +
+                            "\nLatitude: " + selectedLatitude +
+                            "\nLongitude: " + selectedLongitude);
+                    // Update the marker on the map with the selected location
+                    updateMarker(new LatLng(selectedLatitude, selectedLongitude), selectedItem, false);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+//        cost
+        cost.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                trip.setCost(Double.parseDouble(s.toString()));
+                isValidTrip(trip);
+            }
+        });
+
+        passengers.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                trip.setPassengers(Integer.parseInt(s.toString()));
+                isValidTrip(trip);
             }
         });
 
@@ -221,6 +383,59 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         return rootView;
     }
+    private double distance(BidRideLocation to, BidRideLocation from) {
+        double lon1 = Math.toRadians(to.getLng());
+        double lon2 = Math.toRadians(from.getLng());
+
+        double lat1 = Math.toRadians(to.getLat());
+        double lat2 = Math.toRadians(to.getLng());
+
+        // Haversine formula
+        double dlon = lon2 - lon1;
+        double dlat = lat2 - lat1;
+        double a = Math.pow(Math.sin(dlat / 2), 2)
+                + Math.cos(lat1) * Math.cos(lat2)
+                * Math.pow(Math.sin(dlon / 2),2);
+
+        double c = 2 * Math.asin(Math.sqrt(a));
+
+        // Radius of earth in kilometers. Use 3956
+        // for miles
+        double r = 6371;
+
+        // calculate the result
+        return(c * r);
+    }
+
+    private boolean isValidTrip(Trip trip){
+        boolean result = true;
+        if(
+                (trip.getCost() < 1) &&
+                        (trip.getPassengers() < 1)&&
+                        (trip.getDate() == null || trip.getDate().trim().isEmpty())&&
+                        (trip.getTime() == null || trip.getTime().trim().isEmpty())&&
+                        (trip.getFrom() == null)&&
+                        (trip.getTo() == null)&&
+                        (trip.getPostedBy() == null || trip.getPostedBy().trim().isEmpty())&&
+                        (trip.getRideType() == null || trip.getRideType().trim().isEmpty())
+
+        ) result = false;
+//        if(trip.getPassengers() < 1) result = result & false;
+//        if(trip.getDate() == null || trip.getDate().trim().isEmpty()) result = result & false;
+//        if(trip.getTime() == null || trip.getTime().trim().isEmpty()) result = result & false;
+//        if(trip.getFrom() == null) result = result & false;
+//        if(trip.getTo() == null) result = result & false;
+//        if(trip.getPostedBy() == null || trip.getPostedBy().trim().isEmpty()) result = result & false;
+//        if(trip.getRideType() == null || trip.getRideType().trim().isEmpty()) result = result & false;
+
+        if(result){
+            rideNow.setEnabled(true);
+            rideNow.setAlpha(1f);
+        }
+
+        return result;
+    }
+
     private void updateMarker(LatLng latLng, String locationName, boolean isSource) {
         // Remove the previous marker if exists
         if (isSource) {

@@ -29,11 +29,11 @@ public class DriverTripsListFragment  extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         tripArrayList = new ArrayList <>();
         row_index = 0;
-        while (row_index <= 200) {
-            Trip aTrip = new Trip( 1, "abc", "def", 30);
-            tripArrayList.add(aTrip) ;
-            row_index++;
-        }
+//        while (row_index <= 200) {
+//            Trip aTrip = new Trip( 1, "abc", "def", 30);
+//            tripArrayList.add(aTrip) ;
+//            row_index++;
+//        }
 
         // Initialize Adapter
         adapter = new ArrayTripAdapter(R.layout.trip_list_item, tripArrayList, getContext());
