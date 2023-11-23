@@ -5,25 +5,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_trip_list"
             android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
+            android:title="@string/driver_trips" />
         <item
-            android:id="@+id/nav_upcoming_trips"
+            android:id="@+id/nav_my_bids"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/upcoming_trips" />
+            android:title="@string/my_bids" />
         <item
-            android:id="@+id/nav_past_trips"
+            android:id="@+id/nav_rating"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/past_trips" />
-        <item
-            android:id="@+id/nav_become_driver"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/become_driver" />
-        <item
-            android:id="@+id/nav_payment"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/payment" />
+            android:title="@string/rating" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_menu_slideshow"
