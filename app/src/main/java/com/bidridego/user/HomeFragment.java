@@ -126,6 +126,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         rideTypeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton radioButton = rootView.findViewById(checkedId);
             trip.setRideType(String.valueOf(radioButton.getText()));
+            Toast.makeText(getContext(), radioButton.getText(), Toast.LENGTH_LONG).show();
             isValidTrip(trip);
         });
 
