@@ -20,8 +20,8 @@ public class TripViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         cost = tripView.findViewById(R.id.cost);
         destination = tripView.findViewById(R.id.source);
         source = tripView.findViewById(R.id.source);
-        distance = tripView.findViewById(R.id.distance);
-        postedBy = tripView.findViewById(R.id.posted_by);
+//        distance = tripView.findViewById(R.id.distance);
+        postedBy = tripView.findViewById(R.id.username);
         tripView.setOnClickListener(this);
     }
 
