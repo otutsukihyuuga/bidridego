@@ -23,8 +23,20 @@
         android:label="@string/rating"
         tools:layout="@layout/dummy_fragment_slideshow" />
     <fragment
+        android:id="@+id/nav_switch_account"
+        android:name="com.bidridego.ui.slideshow.SlideshowFragment"
+        android:label="@string/switch_to_user"
+        tools:layout="@layout/dummy_fragment_slideshow" />
+    <dialog
+        android:id="@+id/dialog_switch_user"
+        android:name="com.bidridego.driver.SwitchUserDialog"
+        android:label="Switch User" />
+    <fragment
         android:id="@+id/nav_logout"
         android:name="com.bidridego.ui.slideshow.SlideshowFragment"
         android:label="@string/logout"
         tools:layout="@layout/dummy_fragment_slideshow" />
+    <action
+        android:id="@+id/action_nav_switch_account"
+        app:destination="@id/dialog_switch_user" />
 </navigation>

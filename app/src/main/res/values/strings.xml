@@ -11,7 +11,7 @@
     <string name="upcoming_trips">Upcoming Trips</string>
     <string name="past_trips">Past Trips</string>
     <string name="payment">Payment</string>
-    <string name="become_driver">Become a Driver</string>
+    <string name="become_driver">Switch to Driver</string>
 
     <string name="driver_trips">Trips List</string>
     <string name="my_bids">My Bids</string>
@@ -30,4 +30,7 @@
     <string name="maps_api_key">"AIzaSyB4a-cPEPuPYBvNhxFXjEd4Pjtn6x4jXdo"</string>
     <string name="title_driver_activity_main">DriverMainActivity</string>
     <!--    activity_register-->
+    <string name="switch_to_user">Switch to User</string>
+    <string name="switch_to_driver">Switch to Driver</string>
+
 </resources>

@@ -91,22 +91,21 @@ public class HomeActivity extends AppCompatActivity {
         preferences = getSharedPreferences("BidRigeGo", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("registeredRole", role);
-        editor.putString("role", "driver");
 
-        if(!preferences.contains("role")){
-            editor.putString("role", "driver");
+        if(!preferences.contains("localRole")){
+            editor.putString("localRole", "user");
         }
         editor.apply();
     }
     private void navigateToNextScreen() {
         // Replace this with the activity you want to navigate to when the user is already logged in
-        String userRole = preferences.getString("role", "");
+        String userRole = preferences.getString("localRole", "");
         Intent intent;
         // Inflate the menu based on the user's role
         if ("driver".equals(userRole)) {
             intent = new Intent(HomeActivity.this, DriverMainActivity.class);
         } else {
-            intent = new Intent(HomeActivity.this, DriverMainActivity.class);
+            intent = new Intent(HomeActivity.this, UserMainActivity.class);
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

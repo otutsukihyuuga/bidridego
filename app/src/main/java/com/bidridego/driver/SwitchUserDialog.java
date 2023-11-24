@@ -1,36 +1,40 @@
-package com.bidridego.user;
+package com.bidridego.driver;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import com.bidridego.DriverMainActivity;
+import com.bidridego.UserMainActivity;
 
-public class BecomeDriverDialog extends DialogFragment {
+public class SwitchUserDialog extends DialogFragment {
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        SharedPreferences prefs = getContext().getSharedPreferences("BidRigeGo", Context.MODE_PRIVATE);
+
         return new AlertDialog.Builder(requireContext())
-                .setTitle("Become a Driver")
-                .setMessage("Do you want to become a driver?")
+                .setTitle("Switch to User")
+                .setMessage("Do you want to switch to User?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     SharedPreferences preferences = getActivity().getSharedPreferences("BidRigeGo", Context.MODE_PRIVATE);
+                    if (preferences != null) {
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("localRole", "user");
+                        editor.apply();
+                    }
 
                     /**
                      * TODO: update the role of the user to driver
                      * **/
-                    if (preferences != null) {
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("localRole", "driver");
-                        editor.apply();
-                    }
-                    Intent intent = new Intent(getContext(), DriverMainActivity.class);
+
+                    Intent intent = new Intent(getContext(), UserMainActivity.class);
                     startActivity(intent);
                     dialog.dismiss();
                 })
