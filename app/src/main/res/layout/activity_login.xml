@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#2B005C">
@@ -28,13 +29,8 @@
             android:layout_height="wrap_content">
             <Button
                 android:id="@+id/register_user"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:background="#320071"
-                android:text="Sign Up"
-                android:textColor="#fff" />
-
+                android:text="@string/signUp"
+                style="@style/button"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,16 +42,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_menu_camera" />
+                    android:src="@drawable/email"/>
 
                 <EditText
                     android:id="@+id/email"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/edittext_border"
-                    android:hint="Email Address"
-                    android:paddingLeft="20px"
-                    android:textColorHint="#898989" />
+                    style="@style/editText"
+                    android:hint="@string/emailAddress" />
             </LinearLayout>
 
             <LinearLayout
@@ -69,35 +61,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_menu_camera" />
+                    android:src="@drawable/password"/>
 
                 <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/edittext_border"
-                    android:hint="Password"
-                    android:paddingLeft="20px"
                     android:id="@+id/password"
-                    android:textColorHint="#898989" />
+                    style="@style/editText"
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
             </LinearLayout>
 
             <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:background="#320071"
-                android:text="Login"
+                android:text="@string/login"
                 android:id="@+id/login"
-                android:textColor="#fff" />
+                style="@style/button" />
 
             <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:background="#F0A701"
-                android:text="Forgot Password"
-                android:textColor="#320071" />
+                style="@style/button"
+                android:text="@string/forgotPassword"
+                app:backgroundTint="@color/golden"
+                android:textColor="@color/blue"
+                android:layout_marginTop="0dp"/>
         </LinearLayout>
 
     </LinearLayout>

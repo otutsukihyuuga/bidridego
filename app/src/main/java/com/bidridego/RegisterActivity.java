@@ -31,7 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button register;
 
     private FirebaseAuth auth;
-    private FirebaseDatabase firebaseDatabase;
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,6 @@ public class RegisterActivity extends AppCompatActivity {
         confirmPassword = findViewById(R.id.confirmPassword);
         register = findViewById(R.id.register);
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
 
         register.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String txt_password = password.getText().toString();
                 String txt_confirmPassword = confirmPassword.getText().toString();
 
-                User user = new User(txt_firstName, txt_lastName, txt_contact);
+                User user = new User(txt_firstName, txt_lastName, txt_contact, "user");
 
                 if (TextUtils.isEmpty(txt_firstName) || TextUtils.isEmpty(txt_lastName) ||
                         TextUtils.isEmpty(txt_contact) || TextUtils.isEmpty(txt_email) ||
@@ -84,6 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     DatabaseReference usersRef = firebaseDatabase.getReference("users");
                     String userId = auth.getCurrentUser().getUid();
+                    user.setId(userId);
                     usersRef.child(userId).setValue(user).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> databaseTask) {
