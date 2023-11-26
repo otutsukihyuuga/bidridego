@@ -281,12 +281,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    trip.setPassengers(Integer.parseInt(s.toString()));
+                    isValidTrip(trip);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), "Error: Invalid number of passengers", Toast.LENGTH_SHORT).show();
+                }
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
-                trip.setPassengers(Integer.parseInt(s.toString()));
-                isValidTrip(trip);
+
             }
         });
 
@@ -409,29 +415,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private boolean isValidTrip(Trip trip){
-        boolean result = true;
+        boolean result = false;
         if(
-                (trip.getCost() < 1) &&
-                        (trip.getPassengers() < 1)&&
-                        (trip.getDate() == null || trip.getDate().trim().isEmpty())&&
-                        (trip.getTime() == null || trip.getTime().trim().isEmpty())&&
-                        (trip.getFrom() == null)&&
-                        (trip.getTo() == null)&&
-                        (trip.getPostedBy() == null || trip.getPostedBy().trim().isEmpty())&&
-                        (trip.getRideType() == null || trip.getRideType().trim().isEmpty())
+                (trip.getCost() > 0) &&
+                        (trip.getPassengers() > 0)&&
+                        (trip.getDate() != null || !trip.getDate().trim().isEmpty())&&
+                        (trip.getTime() != null || !trip.getTime().trim().isEmpty())&&
+                        (trip.getFrom() != null)&&
+                        (trip.getTo() != null)&&
+                        (trip.getPostedBy() != null || !trip.getPostedBy().trim().isEmpty())&&
+                        (trip.getRideType() != null || !trip.getRideType().trim().isEmpty())
 
-        ) result = false;
-//        if(trip.getPassengers() < 1) result = result & false;
-//        if(trip.getDate() == null || trip.getDate().trim().isEmpty()) result = result & false;
-//        if(trip.getTime() == null || trip.getTime().trim().isEmpty()) result = result & false;
-//        if(trip.getFrom() == null) result = result & false;
-//        if(trip.getTo() == null) result = result & false;
-//        if(trip.getPostedBy() == null || trip.getPostedBy().trim().isEmpty()) result = result & false;
-//        if(trip.getRideType() == null || trip.getRideType().trim().isEmpty()) result = result & false;
-
-        if(result){
+        ) {
+            result = true;
             rideNow.setEnabled(true);
-            rideNow.setAlpha(1f);
         }
 
         return result;

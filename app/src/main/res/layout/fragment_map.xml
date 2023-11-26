@@ -100,7 +100,6 @@
                 android:layout_weight="1"
                 android:background="@color/grey"
                 android:backgroundTint="@color/grey"
-                android:digits="1234"
                 android:ems="10"
                 android:hint="Number of seats"
                 android:inputType="number" />
