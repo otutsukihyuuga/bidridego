@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +16,11 @@ import com.bidridego.R;
 import com.bidridego.models.BidRideLocation;
 import com.bidridego.models.Trip;
 import com.bidridego.viewadapter.ArrayTripAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -22,36 +29,22 @@ public class DriverTripsListFragment  extends Fragment {
     private RecyclerView recyclerView;
     private ArrayTripAdapter adapter;
     public ArrayList<Trip> tripArrayList;
-    int row_index = 1 ;
-    void addDummyData()
-    {
-        BidRideLocation loc = new BidRideLocation(30, 30, "xyz");
-        Trip aTrip = new Trip("d",10, loc, loc, 30, "alice",3,  "date", "String time", false,"suv");
-        tripArrayList.add(aTrip);
-        row_index++;
-
-        Trip bTrip = new Trip("e",10, loc, loc, 30, "bob",3,  "date", "String time", false,"suv");
-        tripArrayList.add(bTrip);
-        row_index++;
-    }
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReferenceToTrips;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recyclerview_list, container, false);
-
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReferenceToTrips = firebaseDatabase.getReference("trips");
         // Initialize RecyclerView
         recyclerView = rootView.findViewById(R.id.recycler_id);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         tripArrayList = new ArrayList <>();
-        row_index = 0;
-//        while (row_index <= 200) {
-//            Trip aTrip = new Trip( 1, "abc", "def", 30);
-//            tripArrayList.add(aTrip) ;
-//            row_index++;
-//        }
-        addDummyData(); //to be removed
         // Initialize Adapter
         adapter = new ArrayTripAdapter(R.layout.trip_list_item, tripArrayList, getContext());
         recyclerView.setAdapter(adapter);
+        tripArrayList.add(new Trip("id", 0, null, null, 0, "postedBy", 1, "date", "time", true, "rideType"));
+        adapter.notifyDataSetChanged();
 
         adapter.setOnItemClickListener(new ArrayTripAdapter.OnItemClickListener() {
             @Override
@@ -63,8 +56,6 @@ public class DriverTripsListFragment  extends Fragment {
                 startActivity(new Intent(getActivity(), BidDetails.class));
             }
         });
-        // Populate your dataset and update the adapter as needed
-
         return rootView;
     }
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bidridego.R;
 import com.bidridego.models.Trip;
 import com.bidridego.viewholder.TripViewHolder;
 
@@ -50,12 +51,17 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
         TextView cost = tripViewHolder.cost;
         TextView destination = tripViewHolder.destination;
         TextView source = tripViewHolder.source;
-        TextView distance = tripViewHolder.distance;
+//        TextView distance = tripViewHolder.distance;
+        TextView date = tripViewHolder.date;
+        TextView time = tripViewHolder.time;
+        TextView postedBy = tripViewHolder.postedBy;
+//        TextView passengers = tripViewHolder.passengers;
+//        TextView isCarPool = tripViewHolder.isCarPool;
 
         cost.setText("" + tripList.get(listPosition).getCost());
         destination.setText("tripList.get(listPosition).getDestination()");
         source.setText("tripList.get(listPosition).getSource()");
-        distance.setText("" + tripList.get(listPosition).getDistance());
+//        distance.setText("" + tripList.get(listPosition).getDistance());
 
         tripViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,5 +71,18 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
                 }
             }
         });
+        Trip currTrip = tripList.get(listPosition);
+
+//        date.setText( currTrip.getDate());
+//        time.setText(currTrip.getTime());
+//        postedBy.setText(currTrip.getPostedBy());
+//        passengers.setText(currTrip.getPassengers());
+//        isCarPool.setText(""+currTrip.isCarPool());
+//        cost.setText(""+ currTrip.getCost());
+//        destination.setText(currTrip.getTo().getLocationName());
+//        source.setText(currTrip.getFrom().getLocationName());
+
+//        distance.setText("" + currTrip.getDistance());
+//        distance.setText("10");
     }
 }
