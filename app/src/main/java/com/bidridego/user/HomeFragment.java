@@ -135,7 +135,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     date.setText(String.valueOf(dayOfMonth)+'/'+String.valueOf(month)+'/'+String.valueOf(year));
-                    trip.setDate(date.toString());
+                    trip.setDate(date.getText().toString());
                     isValidTrip(trip);
                 }
             }, 2023, 11, 11);
@@ -154,7 +154,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     hr += String.valueOf(hourOfDay);
                     min += String.valueOf(minute);
                     time.setText(hr+":"+min);
-                    trip.setDate(time.toString());
+                    trip.setTime(time.getText().toString());
                     isValidTrip(trip);
                 }
             }, 0, 0, true);
@@ -292,7 +292,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if(!s.toString().isEmpty()) trip.setPassengers(Integer.parseInt(s.toString()));
+                isValidTrip(trip);
             }
         });
 
@@ -329,52 +330,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        sourceEditText.setOnItemClickListener((parent, view, position, id) -> {
-            // Get the selected item from the adapter
-            String selectedItem = (String) parent.getItemAtPosition(position);
-
-            // Use the geocoder to get the details (latitude, longitude) for the selected item
-            try {
-                List<Address> addresses = geocoder.getFromLocationName(selectedItem, 1);
-                if (addresses != null && addresses.size() > 0) {
-                    Address selectedAddress = addresses.get(0);
-                    double selectedLatitude = selectedAddress.getLatitude();
-                    double selectedLongitude = selectedAddress.getLongitude();
-
-                    // Now you have the name (selectedItem), latitude, and longitude
-                    showToast("Selected Location: " + selectedItem +
-                            "\nLatitude: " + selectedLatitude +
-                            "\nLongitude: " + selectedLongitude);
-                    // Update the marker on the map with the selected location
-                    updateMarker(new LatLng(selectedLatitude, selectedLongitude), selectedItem, true);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        destinationEditText.setOnItemClickListener((parent, view, position, id) -> {
-            // Get the selected item from the adapter
-            String selectedItem = (String) parent.getItemAtPosition(position);
-
-            // Use the geocoder to get the details (latitude, longitude) for the selected item
-            try {
-                List<Address> addresses = geocoder.getFromLocationName(selectedItem, 1);
-                if (addresses != null && addresses.size() > 0) {
-                    Address selectedAddress = addresses.get(0);
-                    double selectedLatitude = selectedAddress.getLatitude();
-                    double selectedLongitude = selectedAddress.getLongitude();
-
-                    // Now you have the name (selectedItem), latitude, and longitude
-                    showToast("Selected Location: " + selectedItem +
-                            "\nLatitude: " + selectedLatitude +
-                            "\nLongitude: " + selectedLongitude);
-                    // Update the marker on the map with the selected location
-                    updateMarker(new LatLng(selectedLatitude, selectedLongitude), selectedItem, false);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         // Check and request location permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -395,7 +350,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         double lon2 = Math.toRadians(from.getLng());
 
         double lat1 = Math.toRadians(to.getLat());
-        double lat2 = Math.toRadians(to.getLng());
+        double lat2 = Math.toRadians(from.getLng());
 
         // Haversine formula
         double dlon = lon2 - lon1;

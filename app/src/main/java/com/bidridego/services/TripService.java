@@ -1,5 +1,6 @@
 package com.bidridego.services;
 
+import com.bidridego.models.BidRideLocation;
 import com.bidridego.models.Trip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -35,5 +36,9 @@ public class TripService {
         trip.setPostedBy(auth.getCurrentUser().getUid());
 
         databaseReferenceToTrips.child(trip.getId()).setValue(trip);
+        BidRideLocation bidRideLocationTo = trip.getFrom();
+        BidRideLocation bidRideLocationFrom = trip.getTo();
+        databaseReferenceToTrips.child(trip.getId()).child("to").setValue(trip.getTo());
+        databaseReferenceToTrips.child(trip.getId()).child("from").setValue(trip.getFrom());
     }
 }
