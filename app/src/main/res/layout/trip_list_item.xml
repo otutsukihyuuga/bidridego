@@ -36,22 +36,22 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/username"
+                    android:id="@+id/trip_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="User 1"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="26sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/source"
+                    android:id="@+id/trip_source"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="Source" />
                 <TextView
-                    android:id="@+id/destination"
+                    android:id="@+id/trip_destination"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -80,7 +80,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/time"
+                android:id="@+id/trip_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
@@ -93,7 +93,7 @@
 
 
             <TextView
-                android:id="@+id/cost"
+                android:id="@+id/trip_cost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

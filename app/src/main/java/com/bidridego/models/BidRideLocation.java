@@ -7,6 +7,8 @@ public class BidRideLocation {
         this.locationName = locationName;
     }
 
+    public BidRideLocation(){}
+
     private double lat;
     private double lng;
     private  String locationName;
