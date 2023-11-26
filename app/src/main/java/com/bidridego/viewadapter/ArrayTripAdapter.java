@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,15 @@ import java.util.ArrayList;
 public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
     private int trip_row_layout;
     private ArrayList<Trip> tripList;
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     public ArrayTripAdapter(int trip_row_layout_as_id, ArrayList<Trip> tripList, Context context) {
         trip_row_layout = trip_row_layout_as_id;
@@ -43,10 +53,17 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
         TextView distance = tripViewHolder.distance;
 
         cost.setText("" + tripList.get(listPosition).getCost());
-                destination.setText("tripList.get(listPosition).getDestination()");
+        destination.setText("tripList.get(listPosition).getDestination()");
         source.setText("tripList.get(listPosition).getSource()");
-//        destination.setText(tripList.get(listPosition).getDestination());
-//        source.setText(tripList.get(listPosition).getSource());
         distance.setText("" + tripList.get(listPosition).getDistance());
+
+        tripViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(listPosition);
+                }
+            }
+        });
     }
 }
