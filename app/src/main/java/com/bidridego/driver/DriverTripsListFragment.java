@@ -41,21 +41,21 @@ public class DriverTripsListFragment  extends Fragment {
         // Initialize Adapter
         adapter = new ArrayTripAdapter(R.layout.trip_list_item, tripArrayList, getContext());
         recyclerView.setAdapter(adapter);
-        tripArrayList.add(new Trip("id", 0, null, null, 0, "postedBy", 1, "date", "time", true, "rideType"));
-        adapter.notifyDataSetChanged();
-        //        databaseReferenceToTrips.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                snapshot.getChildren().forEach(e->{
-//                    tripArrayList.add(e.getValue(Trip.class));
-//                });
-//                adapter.notifyDataSetChanged();
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+//        tripArrayList.add(new Trip("id", 0, null, null, 0, "postedBy", 1, "date", "time", true, "rideType"));
+//        adapter.notifyDataSetChanged();
+        databaseReferenceToTrips.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                snapshot.getChildren().forEach(e->{
+                    tripArrayList.add(e.getValue(Trip.class));
+                });
+                adapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         // Populate your dataset and update the adapter as needed
 
         return rootView;
