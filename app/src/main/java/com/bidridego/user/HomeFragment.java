@@ -362,8 +362,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         double c = 2 * Math.asin(Math.sqrt(a));
 
         // Radius of earth in kilometers. Use 3956
-        // for miles
-        double r = 6371;
+        // for miles use 6371
+        double r = 3956;
 
         // calculate the result
         return(c * r);

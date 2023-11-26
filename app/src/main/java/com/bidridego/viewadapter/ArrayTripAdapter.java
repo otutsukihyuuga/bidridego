@@ -41,26 +41,25 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
         TextView cost = tripViewHolder.cost;
         TextView destination = tripViewHolder.destination;
         TextView source = tripViewHolder.source;
-        TextView distance = tripViewHolder.distance;
+//        TextView distance = tripViewHolder.distance;
         TextView date = tripViewHolder.date;
         TextView time = tripViewHolder.time;
         TextView postedBy = tripViewHolder.postedBy;
-        TextView passengers = tripViewHolder.passengers;
-        TextView isCarPool = tripViewHolder.isCarPool;
+//        TextView passengers = tripViewHolder.passengers;
+//        TextView isCarPool = tripViewHolder.isCarPool;
 
         Trip currTrip = tripList.get(listPosition);
 
-        date.setText(currTrip.getDate());
-        time.setText(currTrip.getTime());
-        postedBy.setText(currTrip.getPostedBy());
-        passengers.setText(currTrip.getPassengers());
-        isCarPool.setText(""+currTrip.isCarPool());
-        cost.setText((int) currTrip.getCost());
-        destination.setText(currTrip.getTo().getLocationName());
-        source.setText(currTrip.getFrom().getLocationName());
-//        destination.setText(currTrip.getDestination());
-//        source.setText(currTrip.getSource());
+//        date.setText( currTrip.getDate());
+//        time.setText(currTrip.getTime());
+//        postedBy.setText(currTrip.getPostedBy());
+//        passengers.setText(currTrip.getPassengers());
+//        isCarPool.setText(""+currTrip.isCarPool());
+//        cost.setText(""+ currTrip.getCost());
+//        destination.setText(currTrip.getTo().getLocationName());
+//        source.setText(currTrip.getFrom().getLocationName());
+
 //        distance.setText("" + currTrip.getDistance());
-        distance.setText("10");
+//        distance.setText("10");
     }
 }
