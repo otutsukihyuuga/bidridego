@@ -1,4 +1,7 @@
 package com.bidridego.models;
+
+import java.util.HashSet;
+
 public class User {
     private String id;
     private String firstName;
@@ -7,6 +10,8 @@ public class User {
     //    private String address = "";
     private String password;
     private String role;
+
+    private HashSet<String> trips = null;
 
     public User(String firstName, String lastName, String contact, String role) {
         this.firstName = firstName;
@@ -71,5 +76,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public HashSet<String> getTrips() {
+        return trips;
+    }
+
+    public void setTrips(HashSet<String> trips) {
+        this.trips = trips;
     }
 }
