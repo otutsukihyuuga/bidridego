@@ -15,6 +15,7 @@ public class BidMsgDBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TRIP_ID = "trip_id";
     public static final String COLUMN_DRIVER_ID = "driver_id";
     public static final String COLUMN_USER_ID = "user_id";
+    public static final String COLUMN_SENDER_ID = "sender_id";
 
     public BidMsgDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

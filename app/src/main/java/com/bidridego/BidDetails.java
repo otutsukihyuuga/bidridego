@@ -18,6 +18,10 @@ import android.widget.TextView;
 import com.bidridego.models.BidMsg;
 import com.bidridego.models.BidMsgDBHelper;
 import com.bidridego.viewadapter.BidMsgAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,8 +36,10 @@ public class BidDetails extends AppCompatActivity {
     private EditText newBidTextView;
     private ListView listView;
     private BidMsgAdapter bidMsgAdapter;
+    private FirebaseAuth mAuth;
     Button acceptBidBtn;
     private BidMsgDBHelper dbHelper;
+    String userId, customerId, tripId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +49,16 @@ public class BidDetails extends AppCompatActivity {
         setTitle("Bid Details");
         messageList = new ArrayList<>();
 
-        dbHelper = new BidMsgDBHelper(this);
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        userId = currentUser.getUid();
 
+        Bundle receivedBundle = getIntent().getExtras();
+
+        customerId = receivedBundle.getString("customerId");
+        tripId = receivedBundle.getString("tripId");
+
+        dbHelper = new BidMsgDBHelper(this);
 
         driverNameView = findViewById(R.id.driver);
         driverNameView.setText(driver);
