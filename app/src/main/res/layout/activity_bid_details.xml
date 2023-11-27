@@ -9,13 +9,13 @@
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="571dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintBottom_toTopOf="@+id/accept"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.523"
-        app:layout_constraintStart_toStartOf="parent">
-
-    </ListView>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bid"></ListView>
 
     <Button
         android:id="@+id/button5"
@@ -24,8 +24,8 @@
         android:background="@drawable/circular_button"
         android:text="-"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/listView"
-        app:layout_constraintEnd_toStartOf="@+id/editTextText"
+        app:layout_constraintBottom_toTopOf="@+id/accept"
+        app:layout_constraintEnd_toStartOf="@+id/newBid"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -39,7 +39,7 @@
         app:layout_constraintBottom_toTopOf="@+id/accept"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/editTextText" />
+        app:layout_constraintStart_toEndOf="@+id/newBid" />
 
     <Button
         android:id="@+id/accept"
@@ -50,15 +50,41 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/newBid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="number|numberDecimal"
         android:text="Name"
-        app:layout_constraintBottom_toBottomOf="@+id/listView"
+        app:layout_constraintBottom_toTopOf="@+id/accept"
         app:layout_constraintEnd_toStartOf="@+id/button4"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button5" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Initial Bid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/driver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="text"
+        android:layout_marginTop="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/bid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
