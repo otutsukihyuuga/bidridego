@@ -1,5 +1,8 @@
 package com.bidridego;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -8,6 +11,8 @@ import android.view.Menu;
 import com.bidridego.databinding.DriverActivityMainBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
@@ -68,9 +73,22 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         if (item.getItemId() == R.id.nav_switch_account) {
             Log.d("DriverMainActivity", "Switch user clicked");
             navController.navigate(R.id.action_nav_switch_account);
+        } else if(item.getItemId() == R.id.nav_logout) {
+            logout();
         }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    public void logout() {
+        FirebaseAuth.getInstance().signOut();
+        SharedPreferences preferences = getSharedPreferences("BidRigeGo", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

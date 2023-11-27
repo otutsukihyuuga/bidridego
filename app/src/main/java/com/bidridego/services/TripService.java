@@ -36,8 +36,6 @@ public class TripService {
         trip.setPostedBy(auth.getCurrentUser().getUid());
 
         databaseReferenceToTrips.child(trip.getId()).setValue(trip);
-        BidRideLocation bidRideLocationTo = trip.getFrom();
-        BidRideLocation bidRideLocationFrom = trip.getTo();
         databaseReferenceToTrips.child(trip.getId()).child("to").setValue(trip.getTo());
         databaseReferenceToTrips.child(trip.getId()).child("from").setValue(trip.getFrom());
     }

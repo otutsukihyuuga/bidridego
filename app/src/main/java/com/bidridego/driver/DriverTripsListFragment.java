@@ -1,5 +1,6 @@
 package com.bidridego.driver;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bidridego.BidDetails;
 import com.bidridego.R;
 import com.bidridego.models.BidRideLocation;
 import com.bidridego.models.Trip;
@@ -28,7 +31,6 @@ public class DriverTripsListFragment  extends Fragment {
     public ArrayList<Trip> tripArrayList;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReferenceToTrips;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recyclerview_list, container, false);
@@ -41,8 +43,6 @@ public class DriverTripsListFragment  extends Fragment {
         // Initialize Adapter
         adapter = new ArrayTripAdapter(R.layout.trip_list_item, tripArrayList, getContext());
         recyclerView.setAdapter(adapter);
-//        tripArrayList.add(new Trip("id", 0, null, null, 0, "postedBy", 1, "date", "time", true, "rideType"));
-//        adapter.notifyDataSetChanged();
         databaseReferenceToTrips.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -58,6 +58,18 @@ public class DriverTripsListFragment  extends Fragment {
         });
         // Populate your dataset and update the adapter as needed
 
+        adapter.setOnItemClickListener(new ArrayTripAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                // You can use the 'position' parameter to get the clicked item position
+                Bundle bundle = new Bundle();
+                String customerId = tripArrayList.get(position).getPostedBy();
+                String tripId = tripArrayList.get(position).getId();
+                bundle.putString("customerId", customerId);
+                bundle.putString("tripId", tripId);
+                startActivity(new Intent(getActivity(), BidDetails.class).putExtras(bundle));
+            }
+        });
         return rootView;
     }
 }

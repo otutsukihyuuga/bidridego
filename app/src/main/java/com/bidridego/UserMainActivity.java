@@ -1,5 +1,7 @@
 package com.bidridego;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -9,6 +11,7 @@ import android.view.Menu;
 import com.bidridego.databinding.UserActivityMainBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
@@ -25,6 +28,8 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
     private UserActivityMainBinding binding;
     DrawerLayout drawer;
     NavController navController;
+    SharedPreferences preferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +82,22 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
         if (item.getItemId() == R.id.nav_become_driver) {
                 Log.d("UserMainActivity", "Become a Driver clicked");
                 navController.navigate(R.id.action_nav_become_driver_to_dialog_become_driver);
+        }else if(item.getItemId() == R.id.nav_logout) {
+            logout();
         }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void logout() {
+        FirebaseAuth.getInstance().signOut();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }
