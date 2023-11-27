@@ -62,12 +62,15 @@ public class DriverTripsListFragment  extends Fragment {
             @Override
             public void onItemClick(int position) {
                 // You can use the 'position' parameter to get the clicked item position
-                Bundle bundle = new Bundle();
-                String customerId = tripArrayList.get(position).getPostedBy();
-                String tripId = tripArrayList.get(position).getId();
-                bundle.putString("customerId", customerId);
-                bundle.putString("tripId", tripId);
+//                Bundle bundle = new Bundle();
+//                String customerId = trip.getPostedBy();
+//                String tripId = trip.getId();
+//                bundle.putString("customerId", customerId);
+//                bundle.putString("tripId", tripId);
+
+                Trip trip = tripArrayList.get(position);
                 BidingDialog biddingDialog = new BidingDialog();
+                biddingDialog.setTrip(trip);
                 biddingDialog.show(getActivity().getSupportFragmentManager(), "BidingDialogTag");
 //                startActivity(new Intent(getActivity(), BidDetails.class).putExtras(bundle));
             }

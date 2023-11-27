@@ -38,5 +38,7 @@ public class TripService {
         databaseReferenceToTrips.child(trip.getId()).setValue(trip);
         databaseReferenceToTrips.child(trip.getId()).child("to").setValue(trip.getTo());
         databaseReferenceToTrips.child(trip.getId()).child("from").setValue(trip.getFrom());
+        databaseReferenceToTrips.child(trip.getId()).child("minBid").setValue(trip.getMinBid());
+        databaseReferenceToTrips.child(trip.getId()).child("bids").setValue(trip.getBids());
     }
 }
