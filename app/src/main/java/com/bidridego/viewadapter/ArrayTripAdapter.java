@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bidridego.R;
 import com.bidridego.models.BidRideLocation;
 import com.bidridego.models.Trip;
 import com.bidridego.viewholder.TripViewHolder;
@@ -52,12 +51,9 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
         TextView cost = tripViewHolder.cost;
         TextView destination = tripViewHolder.destination;
         TextView source = tripViewHolder.source;
-//        TextView distance = tripViewHolder.distance;
         TextView date = tripViewHolder.date;
         TextView time = tripViewHolder.time;
         TextView postedBy = tripViewHolder.postedBy;
-//        TextView passengers = tripViewHolder.passengers;
-//        TextView isCarPool = tripViewHolder.isCarPool;
 
         Trip currTrip = this.tripList.get(listPosition);
 
@@ -65,7 +61,6 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
         if(currTrip != null){
             date.setText(currTrip.getDate());
             time.setText(currTrip.getTime());
-//        postedBy.setText(currTrip.getPostedBy());
             postedBy.setText("Trushit");
             cost.setText("" + currTrip.getCost());
 
@@ -83,9 +78,5 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
                 }
             }
         });
-//        passengers.setText(currTrip.getPassengers());
-//        isCarPool.setText(""+currTrip.isCarPool());
-//        distance.setText("" + currTrip.getDistance());
-//        distance.setText("10");
     }
 }
