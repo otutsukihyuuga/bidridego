@@ -7,11 +7,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bidridego.models.BidRideLocation;
 import com.bidridego.models.Trip;
+import com.bidridego.models.User;
 import com.bidridego.viewholder.TripViewHolder;
+import com.google.firebase.Firebase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -61,7 +68,17 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
         if(currTrip != null){
             date.setText(currTrip.getDate());
             time.setText(currTrip.getTime());
-            postedBy.setText("Trushit");
+            FirebaseDatabase.getInstance().getReference("users").child(currTrip.getPostedBy()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    postedBy.setText(snapshot.getValue(User.class).getFirstName());
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
             cost.setText("" + currTrip.getCost());
 
             BidRideLocation to = currTrip.getTo();
