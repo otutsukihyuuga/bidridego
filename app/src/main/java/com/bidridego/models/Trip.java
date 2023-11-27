@@ -1,6 +1,7 @@
 package com.bidridego.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Trip {
@@ -32,8 +33,10 @@ public class Trip {
     private String time;
     private boolean isCarPool = false;
     private String rideType;
-    private Bid minBid = new Bid();
-    private ArrayList<Bid> bids = new ArrayList<>();
+    private double minBid;
+//    private ArrayList<Bid> bids = new ArrayList<>();
+    private HashMap<String, Double> bids = new HashMap<>();
+
     public String getId() {
         return this.id;
     }
@@ -122,19 +125,19 @@ public class Trip {
         this.rideType = rideType;
     }
 
-    public Bid getMinBid() {
+    public double getMinBid() {
         return minBid;
     }
 
-    public void setMinBid(Bid minBid) {
+    public void setMinBid(double minBid) {
         this.minBid = minBid;
     }
 
-    public ArrayList<Bid> getBids() {
+    public HashMap<String, Double> getBids() {
         return bids;
     }
 
-    public void setBids(ArrayList<Bid> bids) {
+    public void setBids(HashMap<String, Double> bids) {
         this.bids = bids;
     }
 }
