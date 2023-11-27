@@ -27,7 +27,7 @@ public class Trip {
 
     private String date;
     private String time;
-    private boolean isCarPool;
+    private boolean isCarPool = false;
     private String rideType;
 
     public String getId() {

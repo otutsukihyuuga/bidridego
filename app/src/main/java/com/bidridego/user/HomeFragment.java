@@ -115,7 +115,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         rideNow = rootView.findViewById(R.id.ride_now);
         rideNow.setEnabled(false);
         Trip trip = new Trip();
-        trip.setCarPool(false);
+//        trip.setCarPool(false);
         trip.setPostedBy(FirebaseAuth.getInstance().getCurrentUser().getUid());
         AtomicBoolean isToSet = new AtomicBoolean(false);
         AtomicBoolean isFromSet = new AtomicBoolean(false);
