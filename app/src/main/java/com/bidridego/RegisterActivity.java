@@ -58,17 +58,24 @@ public class RegisterActivity extends AppCompatActivity {
                 String txt_password = password.getText().toString();
                 String txt_confirmPassword = confirmPassword.getText().toString();
 
-                User user = new User(txt_firstName, txt_lastName, txt_contact);
-
-                if (TextUtils.isEmpty(txt_firstName) || TextUtils.isEmpty(txt_lastName) ||
-                        TextUtils.isEmpty(txt_contact) || TextUtils.isEmpty(txt_email) ||
-                        TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_confirmPassword)
-                ) {
-                    toast(RegisterActivity.this, "Please fill all the fields!");
-                } else if (txt_password.length() < 6 || !txt_confirmPassword.equals(txt_password)) {
-                    toast(RegisterActivity.this, "Password too short!");
+                if (!txt_confirmPassword.equals(txt_password)) {
+                    // Passwords do not match, show Toast message
+                    toast(RegisterActivity.this, "Password and Confirm Password aren't same ");
                 } else {
-                    registerUser(user, txt_email, txt_password);
+                    // Passwords match, proceed with registration
+
+                    User user = new User(txt_firstName, txt_lastName, txt_contact);
+
+                    if (TextUtils.isEmpty(txt_firstName) || TextUtils.isEmpty(txt_lastName) ||
+                            TextUtils.isEmpty(txt_contact) || TextUtils.isEmpty(txt_email) ||
+                            TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_confirmPassword)
+                    ) {
+                        toast(RegisterActivity.this, "Please fill all the fields!");
+                    } else if (txt_password.length() < 6 || !txt_confirmPassword.equals(txt_password)) {
+                        toast(RegisterActivity.this, "Password too short!");
+                    } else {
+                        registerUser(user, txt_email, txt_password);
+                    }
                 }
             }
         });

@@ -12,15 +12,15 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
 
-<!--    activity_login-->
+    <!--    activity_login-->
     <string name="signUp">Sign Up</string>
     <string name="emailAddress">Email Address</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="forgotPassword">Forgot Password</string>
-<!--    activity_home-->
+    <!--    activity_home-->
     <string name="register">Register</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="maps_api_key">"AIzaSyB4a-cPEPuPYBvNhxFXjEd4Pjtn6x4jXdo"</string>
-<!--    activity_register-->
+    <!--    activity_register-->
 </resources>
