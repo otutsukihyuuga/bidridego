@@ -2,6 +2,7 @@ package com.bidridego;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
         register = findViewById(R.id.register);
 
         auth = FirebaseAuth.getInstance();
+        preferences = getSharedPreferences("BidRigeGo", Context.MODE_PRIVATE);
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,24 +61,17 @@ public class RegisterActivity extends AppCompatActivity {
                 String txt_password = password.getText().toString();
                 String txt_confirmPassword = confirmPassword.getText().toString();
 
-                if (!txt_confirmPassword.equals(txt_password)) {
-                    // Passwords do not match, show Toast message
-                    toast(RegisterActivity.this, "Password and Confirm Password aren't same ");
+                User user = new User(txt_firstName, txt_lastName, txt_contact, "user");
+
+                if (TextUtils.isEmpty(txt_firstName) || TextUtils.isEmpty(txt_lastName) ||
+                        TextUtils.isEmpty(txt_contact) || TextUtils.isEmpty(txt_email) ||
+                        TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_confirmPassword)
+                ) {
+                    toast(RegisterActivity.this, "Please fill all the fields!");
+                } else if (txt_password.length() < 6 || !txt_confirmPassword.equals(txt_password)) {
+                    toast(RegisterActivity.this, "Password too short!");
                 } else {
-                    // Passwords match, proceed with registration
-
-                    User user = new User(txt_firstName, txt_lastName, txt_contact);
-
-                    if (TextUtils.isEmpty(txt_firstName) || TextUtils.isEmpty(txt_lastName) ||
-                            TextUtils.isEmpty(txt_contact) || TextUtils.isEmpty(txt_email) ||
-                            TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_confirmPassword)
-                    ) {
-                        toast(RegisterActivity.this, "Please fill all the fields!");
-                    } else if (txt_password.length() < 6 || !txt_confirmPassword.equals(txt_password)) {
-                        toast(RegisterActivity.this, "Password too short!");
-                    } else {
-                        registerUser(user, txt_email, txt_password);
-                    }
+                    registerUser(user, txt_email, txt_password);
                 }
             }
         });
@@ -90,13 +86,15 @@ public class RegisterActivity extends AppCompatActivity {
 
                     DatabaseReference usersRef = firebaseDatabase.getReference("users");
                     String userId = auth.getCurrentUser().getUid();
+                    user.setId(userId);
                     usersRef.child(userId).setValue(user).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> databaseTask) {
                             if (databaseTask.isSuccessful()) {
                                 toast(RegisterActivity.this, "Registration successful!");
-//                              intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
                                 finish();
                             } else {
                                 auth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -117,9 +115,20 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+        logout();
 
     }
 
+    public void logout() {
+        FirebaseAuth.getInstance().signOut();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
     private void toast(Context context, String text){
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }

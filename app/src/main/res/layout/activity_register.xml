@@ -41,12 +41,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="password"
+        android:inputType="textPassword"
         android:layout_below="@id/email"
         android:id="@+id/password"
         android:layout_marginTop="10dp"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textPassword"
         android:hint="confirm password"
         android:layout_below="@id/password"
         android:id="@+id/confirmPassword"
