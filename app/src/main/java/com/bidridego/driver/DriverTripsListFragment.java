@@ -67,7 +67,9 @@ public class DriverTripsListFragment  extends Fragment {
                 String tripId = tripArrayList.get(position).getId();
                 bundle.putString("customerId", customerId);
                 bundle.putString("tripId", tripId);
-                startActivity(new Intent(getActivity(), BidDetails.class).putExtras(bundle));
+                BidingDialog biddingDialog = new BidingDialog();
+                biddingDialog.show(getActivity().getSupportFragmentManager(), "BidingDialogTag");
+//                startActivity(new Intent(getActivity(), BidDetails.class).putExtras(bundle));
             }
         });
         return rootView;
