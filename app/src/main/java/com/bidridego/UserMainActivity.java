@@ -79,13 +79,16 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.nav_become_driver) {
+        if(item.getItemId() == R.id.nav_home) {
+            navController.navigate(R.id.nav_home);
+        } else if (item.getItemId() == R.id.nav_become_driver) {
                 Log.d("UserMainActivity", "Become a Driver clicked");
                 navController.navigate(R.id.action_nav_become_driver_to_dialog_become_driver);
-        }else if(item.getItemId() == R.id.nav_logout) {
+        } else if(item.getItemId() == R.id.nav_logout) {
             logout();
+        } else if(item.getItemId() == R.id.nav_upcoming_trips) {
+            navController.navigate(R.id.nav_upcoming_trips);
         }
-
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
