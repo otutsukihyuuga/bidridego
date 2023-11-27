@@ -60,7 +60,11 @@ public class RegisterActivity extends AppCompatActivity {
                 String txt_contact = contact.getText().toString();
                 String txt_password = password.getText().toString();
                 String txt_confirmPassword = confirmPassword.getText().toString();
-
+                if (!txt_confirmPassword.equals(txt_password)) {
+                    // Passwords do not match, show Toast message
+                    toast(RegisterActivity.this, "Password and Confirm Password aren't same ");
+                } else {
+                    // Passwords match, proceed with registration
                 User user = new User(txt_firstName, txt_lastName, txt_contact, "user");
 
                 if (TextUtils.isEmpty(txt_firstName) || TextUtils.isEmpty(txt_lastName) ||
@@ -73,6 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
                     registerUser(user, txt_email, txt_password);
                 }
+            }
             }
         });
     }
