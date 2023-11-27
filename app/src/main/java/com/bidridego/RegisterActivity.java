@@ -2,6 +2,7 @@ package com.bidridego;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
         register = findViewById(R.id.register);
 
         auth = FirebaseAuth.getInstance();
+        preferences = getSharedPreferences("BidRigeGo", Context.MODE_PRIVATE);
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,8 +92,9 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> databaseTask) {
                             if (databaseTask.isSuccessful()) {
                                 toast(RegisterActivity.this, "Registration successful!");
-//                              intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
                                 finish();
                             } else {
                                 auth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -111,9 +115,20 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+        logout();
 
     }
 
+    public void logout() {
+        FirebaseAuth.getInstance().signOut();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
     private void toast(Context context, String text){
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }

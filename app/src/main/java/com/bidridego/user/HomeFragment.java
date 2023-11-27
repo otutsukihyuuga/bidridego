@@ -374,12 +374,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         if(
                 (trip.getCost() > 0) &&
                         (trip.getPassengers() > 0)&&
-                        (trip.getDate() != null || !trip.getDate().trim().isEmpty())&&
-                        (trip.getTime() != null || !trip.getTime().trim().isEmpty())&&
+                        (trip.getDate() != null && !trip.getDate().trim().isEmpty())&&
+                        (trip.getTime() != null && !trip.getTime().trim().isEmpty())&&
                         (trip.getFrom() != null)&&
                         (trip.getTo() != null)&&
-                        (trip.getPostedBy() != null || !trip.getPostedBy().trim().isEmpty())&&
-                        (trip.getRideType() != null || !trip.getRideType().trim().isEmpty())
+                        (trip.getPostedBy() != null && !trip.getPostedBy().trim().isEmpty())&&
+                        (trip.getRideType() != null && !trip.getRideType().trim().isEmpty())
 
         ) {
             result = true;
