@@ -130,7 +130,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         rideTypeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton radioButton = rootView.findViewById(checkedId);
             trip.setRideType(String.valueOf(radioButton.getText()));
-            Toast.makeText(getContext(), radioButton.getText(), Toast.LENGTH_LONG).show();
             isValidTrip(trip);
         });
 
@@ -215,10 +214,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     double selectedLatitude = selectedAddress.getLatitude();
                     double selectedLongitude = selectedAddress.getLongitude();
 
-                    // Now you have the name (selectedItem), latitude, and longitude
-                    showToast("Selected Location: " + selectedItem +
-                            "\nLatitude: " + selectedLatitude +
-                            "\nLongitude: " + selectedLongitude);
                     BidRideLocation from = new BidRideLocation(selectedLatitude, selectedLongitude, selectedItem);
                     trip.setFrom(from);
                     isFromSet.set(true);
@@ -249,9 +244,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     isToSet.set(true);
                     if(isFromSet.get()) trip.setDistance(distance(trip.getFrom(), to));
                     isValidTrip(trip);
-                    showToast("Selected Location: " + selectedItem +
-                            "\nLatitude: " + selectedLatitude +
-                            "\nLongitude: " + selectedLongitude);
+
                     // Update the marker on the map with the selected location
                     updateMarker(new LatLng(selectedLatitude, selectedLongitude), selectedItem, false);
                 }
@@ -631,7 +624,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             if (addresses != null && addresses.size() > 0) {
                 Address address = addresses.get(0);
                 String locationName = address.getAddressLine(0); // You can customize this based on your needs
-                showToast("Current Location: " + locationName);
                 sourceEditText.setText(locationName);
             }
         } catch (IOException e) {
