@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Bidridego"
         tools:targetApi="31">
         <activity
+            android:name=".user.UserTripBidsActivity"
+            android:exported="false" />
+        <activity
             android:name=".DriverMainActivity"
             android:exported="false"
             android:label="@string/title_driver_activity_main"
