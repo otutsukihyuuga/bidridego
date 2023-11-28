@@ -47,6 +47,7 @@
                 <EditText
                     android:id="@+id/email"
                     style="@style/editText"
+                    android:inputType="textEmailAddress"
                     android:hint="@string/emailAddress" />
             </LinearLayout>
 

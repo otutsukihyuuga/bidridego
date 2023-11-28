@@ -90,6 +90,8 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
             logout();
         } else if(item.getItemId() == R.id.nav_upcoming_trips) {
             navController.navigate(R.id.nav_upcoming_trips);
+        } else if(item.getItemId() == R.id.nav_past_trips) {
+            navController.navigate(R.id.nav_past_trips);
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

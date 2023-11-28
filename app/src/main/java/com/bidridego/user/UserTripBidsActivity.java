@@ -1,19 +1,14 @@
 package com.bidridego.user;
 
-import android.content.Intent;
-import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.os.Bundle;
 import com.bidridego.R;
-import com.bidridego.driver.BidingDialog;
 import com.bidridego.models.Trip;
 import com.bidridego.utils.DateTimeUtils;
-import com.bidridego.viewadapter.UserUpcomingTripAdapter;
+import com.bidridego.viewadapter.UserTripBidsAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,27 +19,25 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- * A fragment representing a list of Items.
- */
-public class FragmentUpcomingTrips extends Fragment {
+public class UserTripBidsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private UserUpcomingTripAdapter adapter;
+    private UserTripBidsAdapter adapter;
     public ArrayList<Trip> tripArrayList;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReferenceToTrips;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.user_fragment_upcoming_trips_list, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user_trip_bids);
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReferenceToTrips = firebaseDatabase.getReference("trips");
         // Initialize RecyclerView
-        recyclerView = rootView.findViewById(R.id.user_upcoming_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView = findViewById(R.id.user_trip_bids);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         tripArrayList = new ArrayList <>();
         // Initialize Adapter
-        adapter = new UserUpcomingTripAdapter(R.layout.user_fragment_upcoming_trips, tripArrayList, getContext());
+        adapter = new UserTripBidsAdapter(R.layout.user_trip_bids_list_item, tripArrayList, this);
         recyclerView.setAdapter(adapter);
 
         String filterDate;
@@ -68,14 +61,5 @@ public class FragmentUpcomingTrips extends Fragment {
 
             }
         });
-        adapter.setOnItemClickListener(new UserUpcomingTripAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Trip trip = tripArrayList.get(position);
-                startActivity(new Intent(getActivity(), UserTripBidsActivity.class));
-            }
-        });
-        return rootView;
     }
-
 }
