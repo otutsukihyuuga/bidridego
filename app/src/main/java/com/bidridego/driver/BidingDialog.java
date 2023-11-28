@@ -70,6 +70,7 @@ public class BidingDialog extends DialogFragment {
             trip.setBids(bids);
 
             TripService.getInstance().saveOrUpdate(trip);
+            dismiss();
         });
 
         // Set up the AlertDialog builder

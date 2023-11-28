@@ -1,5 +1,6 @@
 package com.bidridego.viewadapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +51,7 @@ public class UserUpcomingTripAdapter extends RecyclerView.Adapter<UpcomingTripVi
     }
 
     @Override
-    public void onBindViewHolder(final UpcomingTripViewHolder tripViewHolder, final int listPosition) {
+    public void onBindViewHolder(final UpcomingTripViewHolder tripViewHolder, @SuppressLint("RecyclerView") final int listPosition) {
         TextView source = tripViewHolder.source;
         TextView destination = tripViewHolder.destination;
         TextView minBid = tripViewHolder.minBid;
@@ -62,8 +63,13 @@ public class UserUpcomingTripAdapter extends RecyclerView.Adapter<UpcomingTripVi
 
 
         if(currTrip != null){
-            date.setText(currTrip.getDate());
-            time.setText(currTrip.getTime());
+//            date.setText(currTrip.getDate());
+//            time.setText(currTrip.getTime());
+
+            String[] dateTime = currTrip.getDateAndTime().split(" ");
+            date.setText(dateTime[0]);
+            time.setText(dateTime[1]);
+
             FirebaseDatabase.getInstance().getReference("users").child(currTrip.getPostedBy()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

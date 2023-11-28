@@ -66,8 +66,9 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
 
 
         if(currTrip != null){
-            date.setText(currTrip.getDate());
-            time.setText(currTrip.getTime());
+            String[] dateTime = currTrip.getDateAndTime().split(" ");
+            date.setText(dateTime[0]);
+            time.setText(dateTime[1]);
             FirebaseDatabase.getInstance().getReference("users").child(currTrip.getPostedBy()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
