@@ -16,6 +16,7 @@ import com.bidridego.R;
 import com.bidridego.models.BidRideLocation;
 import com.bidridego.models.Trip;
 import com.bidridego.viewadapter.ArrayTripAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,9 +44,24 @@ public class DriverTripsListFragment  extends Fragment {
         // Initialize Adapter
         adapter = new ArrayTripAdapter(R.layout.trip_list_item, tripArrayList, getContext());
         recyclerView.setAdapter(adapter);
-        databaseReferenceToTrips.addListenerForSingleValueEvent(new ValueEventListener() {
+//        databaseReferenceToTrips.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                snapshot.getChildren().forEach(e->{
+//                    tripArrayList.add(e.getValue(Trip.class));
+//                });
+//                adapter.notifyDataSetChanged();
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+
+        databaseReferenceToTrips.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                tripArrayList.clear();
                 snapshot.getChildren().forEach(e->{
                     tripArrayList.add(e.getValue(Trip.class));
                 });
@@ -58,22 +74,13 @@ public class DriverTripsListFragment  extends Fragment {
         });
         // Populate your dataset and update the adapter as needed
 
-        adapter.setOnItemClickListener(new ArrayTripAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                // You can use the 'position' parameter to get the clicked item position
-//                Bundle bundle = new Bundle();
-//                String customerId = trip.getPostedBy();
-//                String tripId = trip.getId();
-//                bundle.putString("customerId", customerId);
-//                bundle.putString("tripId", tripId);
+        adapter.setOnItemClickListener(position -> {
+            // You can use the 'position' parameter to get the clicked item position
+            Trip trip = tripArrayList.get(position);
 
-                Trip trip = tripArrayList.get(position);
-                BidingDialog biddingDialog = new BidingDialog();
-                biddingDialog.setTrip(trip);
-                biddingDialog.show(getActivity().getSupportFragmentManager(), "BidingDialogTag");
-//                startActivity(new Intent(getActivity(), BidDetails.class).putExtras(bundle));
-            }
+            BidingDialog biddingDialog = new BidingDialog();
+            biddingDialog.setTrip(trip);
+            biddingDialog.show(getActivity().getSupportFragmentManager(), "BidingDialogTag");
         });
         return rootView;
     }

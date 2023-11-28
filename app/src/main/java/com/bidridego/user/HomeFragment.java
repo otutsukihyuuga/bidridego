@@ -271,7 +271,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void afterTextChanged(Editable s) {
-                trip.setCost(Double.parseDouble(s.toString()));
+                if(!s.toString().isEmpty()) trip.setCost(Double.parseDouble(s.toString()));
                 isValidTrip(trip);
             }
         });

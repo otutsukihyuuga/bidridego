@@ -22,6 +22,8 @@ import com.bidridego.models.Trip;
 import com.bidridego.services.TripService;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.HashMap;
+
 public class BidingDialog extends DialogFragment {
     private Trip trip;
 
@@ -47,18 +49,21 @@ public class BidingDialog extends DialogFragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
-                if(trip.getMinBid() != null && !s.toString().isEmpty()){
-                    if(Double.parseDouble(s.toString()) > trip.getMinBid().getBidValue()) sendButton.setEnabled(true);
-                    else sendButton.setEnabled(false);
-                }else sendButton.setEnabled(true);
+                if(!s.toString().isEmpty()){
+                    if(Double.parseDouble(s.toString()) > 0) sendButton.setEnabled(true);
+                }else sendButton.setEnabled(false);
             }
         });
 
         sendButton.setEnabled(false);
         sendButton.setOnClickListener(v -> {
             Bid bid = new Bid(FirebaseAuth.getInstance().getCurrentUser().getUid(), Double.parseDouble(priceEditText.getText().toString()));
-            trip.setMinBid(bid);
-            trip.getBids().add(bid);
+            trip.setMinBid(bid.getBidValue());
+            String driverID = bid.getDriverID();
+            HashMap<String, Double> bids = new HashMap();
+
+            bids.put(driverID, bid.getBidValue());
+            trip.setBids(bids);
             TripService.getInstance().saveOrUpdate(trip);
         });
 
