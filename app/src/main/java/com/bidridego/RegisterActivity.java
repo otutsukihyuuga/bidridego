@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -40,10 +42,16 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        String alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String num = "1234567890";
+
         firstName = findViewById(R.id.firstName);
+        firstName.setFilters(new InputFilter[]{new SymbolInputFilter(alpha)});
         lastName = findViewById(R.id.lastName);
+        lastName.setFilters(new InputFilter[]{new SymbolInputFilter(alpha)});
         email = findViewById(R.id.email);
         contact = findViewById(R.id.contact);
+        contact.setFilters(new InputFilter[]{new SymbolInputFilter(num)});
         password = findViewById(R.id.password);
         confirmPassword = findViewById(R.id.confirmPassword);
         register = findViewById(R.id.register);
@@ -112,11 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String txt_contact = contact.getText().toString().trim();
                 String txt_password = password.getText().toString().trim();
                 String txt_confirmPassword = confirmPassword.getText().toString().trim();
-                if (!txt_confirmPassword.equals(txt_password)) {
-                    // Passwords do not match, show Toast message
-                    toast(RegisterActivity.this, "Password and Confirm Password aren't same ");
-                } else {
-                    // Passwords match, proceed with registration
+
                 User user = new User(txt_firstName, txt_lastName, txt_contact, "user");
 
                 if (hasError()) {
@@ -125,38 +129,45 @@ public class RegisterActivity extends AppCompatActivity {
                     registerUser(user, txt_email, txt_password);
                 }
             }
-            }
         });
     }
     private boolean hasError(){
-        return firstName.getError() != null || lastName.getError() != null || contact.getError() != null
-                || email.getError()!= null || password.getError()!= null || confirmPassword.getError()!= null;
+        return validateEmpty(firstName) || validateEmpty(lastName) || validateEmpty(contact) || validateEmpty(email)
+                || validateEmpty(password) || validatePasswordLength() || validateConfirmPassword() || validateContact()
+                || validateAndHandleEmail();
     }
-    private void validatePasswordLength(){
+    private boolean validatePasswordLength(){
         String pass = password.getText().toString().trim();
         if(pass.length()<6)
         {
             password.setError("Password length must be 6 characters");
+            return true;
         }else{
             password.setError(null);
+            return false;
         }
     }
-    private void validateConfirmPassword(){
+    private boolean validateConfirmPassword(){
         String pass = password.getText().toString().trim();
         String confirmpass = confirmPassword.getText().toString().trim();
-        if(!pass.equals(confirmpass))
+        if(!pass.equals(confirmpass)) {
             confirmPassword.setError("Should be same as password");
+            return true;
+        }
         else
             confirmPassword.setError(null);
+        return false;
     }
-    private void validateContact(){
+    private boolean validateContact(){
         String number = contact.getText().toString().trim();
         if(number.length()!=10)
         {
             contact.setError("Number can be 10 digits only");
+            return true;
         }
         else
             contact.setError(null);
+        return false;
     }
     private boolean validateEmpty(EditText et){
         String enteredText = et.getText().toString().trim();
@@ -170,14 +181,16 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return false;
     }
-    private void validateAndHandleEmail() {
+    private boolean validateAndHandleEmail() {
         String enteredText = email.getText().toString().trim();
 
         if (!isValidEmail(enteredText)) {
             email.setError("Invalid email address");
+            return true;
         }
         else {
             email.setError(null);
+            return false;
         }
     }
 
@@ -229,5 +242,27 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void toast(Context context, String text){
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+    }
+    public class SymbolInputFilter implements InputFilter {
+
+        private String allowedSymbols;
+
+        public SymbolInputFilter(String allowedSymbols) {
+            this.allowedSymbols = allowedSymbols;
+        }
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            StringBuilder filteredStringBuilder = new StringBuilder();
+
+            for (int i = start; i < end; i++) {
+                char currentChar = source.charAt(i);
+                if (allowedSymbols.indexOf(currentChar) != -1) {
+                    filteredStringBuilder.append(currentChar);
+                }
+            }
+
+            return filteredStringBuilder.toString();
+        }
     }
 }
