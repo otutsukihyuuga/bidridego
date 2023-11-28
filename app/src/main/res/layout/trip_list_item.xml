@@ -120,7 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="Winning"
+            android:text="Winner"
             android:textColor="@color/black"
             android:textStyle="bold" />
 
