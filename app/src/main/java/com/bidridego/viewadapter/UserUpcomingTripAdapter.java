@@ -87,12 +87,9 @@ public class UserUpcomingTripAdapter extends RecyclerView.Adapter<UpcomingTripVi
             if(to != null) destination.setText(to.getLocationName());
             if(from != null) source.setText(from.getLocationName());
         }
-        tripViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(listPosition);
-                }
+        tripViewHolder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(listPosition);
             }
         });
     }
