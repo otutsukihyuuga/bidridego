@@ -1,5 +1,6 @@
 package com.bidridego.viewadapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +60,7 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final TripViewHolder tripViewHolder, final int listPosition) {
+    public void onBindViewHolder(final TripViewHolder tripViewHolder, @SuppressLint("RecyclerView") final int listPosition) {
         TextView cost = tripViewHolder.cost;
         TextView destination = tripViewHolder.destination;
         TextView source = tripViewHolder.source;
