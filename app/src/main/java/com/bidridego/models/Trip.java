@@ -1,10 +1,11 @@
 package com.bidridego.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class Trip {
+public class Trip implements Serializable {
     public Trip(String id, double cost, BidRideLocation to, BidRideLocation from, double distance, String postedBy, int passengers, String dateAndTime, boolean isCarPool, String rideType) {
         this.id = id;
         this.cost = cost;
