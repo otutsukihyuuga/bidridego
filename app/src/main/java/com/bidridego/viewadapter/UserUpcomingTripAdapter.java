@@ -75,7 +75,7 @@ public class UserUpcomingTripAdapter extends RecyclerView.Adapter<UpcomingTripVi
                 }
             });
             budget.setText("" + currTrip.getCost());
-            minBid.setText("" + currTrip.getMinBid().getBidValue());
+            minBid.setText("" + currTrip.getMinBid());
 
             BidRideLocation to = currTrip.getTo();
             BidRideLocation from = currTrip.getFrom();
