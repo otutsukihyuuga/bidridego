@@ -1,5 +1,6 @@
 package com.bidridego;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
             }
         });
         // Initialize SharedPreferences
+        preferences = getSharedPreferences("BidRigeGo", Context.MODE_PRIVATE);
         setupNavigationDrawer();
     }
     private void setupNavigationDrawer() {

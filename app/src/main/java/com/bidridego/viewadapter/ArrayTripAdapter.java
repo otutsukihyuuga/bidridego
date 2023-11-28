@@ -95,11 +95,11 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
                 }
             });
             String driverID = FirebaseAuth.getInstance().getUid();
-            cost.setText("CAD " + currTrip.getBids().getOrDefault(driverID, currTrip.getCost()));
+            cost.setText("$" + currTrip.getBids().getOrDefault(driverID, currTrip.getCost()));
 
             if(currTrip.getMinBid() > 0) {
                 tripWhos.setText("Your:");
-                minBid.setText(String.valueOf(currTrip.getMinBid()));
+                minBid.setText("$"+ currTrip.getMinBid());
             }else {
                 tripWhos.setText("Budget:");
             }
@@ -110,12 +110,9 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
             if(to != null) destination.setText(to.getLocationName());
             if(from != null) source.setText(from.getLocationName());
         }
-        tripViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(listPosition);
-                }
+        tripViewHolder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(listPosition);
             }
         });
     }
