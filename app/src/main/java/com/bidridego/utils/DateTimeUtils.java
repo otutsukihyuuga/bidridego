@@ -18,4 +18,13 @@ public class DateTimeUtils {
         String timeStamp = dateFormat.format(date);
         return timeStamp;
     }
+
+    public static String formatDate(Date date, String outputFormat) {
+        if (date != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat(outputFormat, Locale.getDefault());
+            return sdf.format(date);
+        } else {
+            return null;
+        }
+    }
 }

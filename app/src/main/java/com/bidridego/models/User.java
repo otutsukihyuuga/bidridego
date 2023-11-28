@@ -10,7 +10,6 @@ public class User {
     //    private String address = "";
     private String password;
     private String role;
-
     private HashSet<String> trips = null;
 
     public User(String firstName, String lastName, String contact, String role) {
