@@ -20,7 +20,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
     private int trip_row_layout;
@@ -60,18 +64,20 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
         TextView source = tripViewHolder.source;
         TextView date = tripViewHolder.date;
         TextView time = tripViewHolder.time;
-        TextView postedBy = tripViewHolder.postedBy;
+        TextView minBid = tripViewHolder.minBid;
 
         Trip currTrip = this.tripList.get(listPosition);
 
 
         if(currTrip != null){
-            date.setText(currTrip.getDate());
+            Date dateData = parseDate(currTrip.getDate(), "dd/MM/yyyy");
+
+            String outputDate = formatDate(dateData, "dd MMMM yyyy");
+            date.setText(outputDate);
             time.setText(currTrip.getTime());
             FirebaseDatabase.getInstance().getReference("users").child(currTrip.getPostedBy()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    postedBy.setText(snapshot.getValue(User.class).getFirstName());
                 }
 
                 @Override
@@ -80,6 +86,10 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
                 }
             });
             cost.setText("" + currTrip.getCost());
+
+            if(currTrip.getMinBid() > 0) {
+                minBid.setText(String.valueOf(currTrip.getMinBid()));
+            }
 
             BidRideLocation to = currTrip.getTo();
             BidRideLocation from = currTrip.getFrom();
@@ -95,5 +105,23 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
                 }
             }
         });
+    }
+    private static Date parseDate(String dateStr, String inputFormat) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(inputFormat, Locale.getDefault());
+            return sdf.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static String formatDate(Date date, String outputFormat) {
+        if (date != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat(outputFormat, Locale.getDefault());
+            return sdf.format(date);
+        } else {
+            return null;
+        }
     }
 }
