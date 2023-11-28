@@ -55,7 +55,6 @@ public class UserUpcomingTripAdapter extends RecyclerView.Adapter<UpcomingTripVi
         TextView source = tripViewHolder.source;
         TextView destination = tripViewHolder.destination;
         TextView minBid = tripViewHolder.minBid;
-        TextView budget = tripViewHolder.budget;
         TextView date = tripViewHolder.date;
         TextView time = tripViewHolder.time;
 
@@ -80,7 +79,6 @@ public class UserUpcomingTripAdapter extends RecyclerView.Adapter<UpcomingTripVi
 
                 }
             });
-            budget.setText("" + currTrip.getCost());
             minBid.setText("" + currTrip.getMinBid());
 
             BidRideLocation to = currTrip.getTo();

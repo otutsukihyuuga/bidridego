@@ -18,7 +18,6 @@ public class UpcomingTripViewHolder extends RecyclerView.ViewHolder implements V
         source = tripView.findViewById(R.id.user_upcoming_source);
         destination = tripView.findViewById(R.id.user_upcoming_destination);
         minBid = tripView.findViewById(R.id.user_upcoming_min_bid);
-        budget = tripView.findViewById(R.id.user_upcoming_budget);
         date = tripView.findViewById(R.id.user_upcoming_date);
         time = tripView.findViewById(R.id.user_upcoming_time);
         tripView.setOnClickListener(this);
