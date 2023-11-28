@@ -49,8 +49,61 @@ public class RegisterActivity extends AppCompatActivity {
         register = findViewById(R.id.register);
 
         auth = FirebaseAuth.getInstance();
-        preferences = getSharedPreferences("BidRigeGo", Context.MODE_PRIVATE);
+        preferences = getSharedPreferences("BidRideGo", Context.MODE_PRIVATE);
 
+        email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if(!validateEmpty(email))
+                        validateAndHandleEmail();
+                }
+            }
+        });
+        firstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus)
+                {
+                    validateEmpty(firstName);
+                }
+            }
+        });
+        lastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus)
+                {
+                    validateEmpty(lastName);
+                }
+            }
+        });
+        contact.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if(!validateEmpty(contact))
+                        validateContact();
+                }
+            }
+        });
+        password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if(!validateEmpty(password))
+                        validatePasswordLength();
+                }
+            }
+        });
+        confirmPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    validateConfirmPassword();
+                }
+            }
+        });
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,27 +112,73 @@ public class RegisterActivity extends AppCompatActivity {
                 String txt_email = email.getText().toString();
                 String txt_contact = contact.getText().toString();
                 String txt_password = password.getText().toString();
-                String txt_confirmPassword = confirmPassword.getText().toString();
-                if (!txt_confirmPassword.equals(txt_password)) {
-                    // Passwords do not match, show Toast message
-                    toast(RegisterActivity.this, "Password and Confirm Password aren't same ");
-                } else {
-                    // Passwords match, proceed with registration
+
                 User user = new User(txt_firstName, txt_lastName, txt_contact, "user");
 
-                if (TextUtils.isEmpty(txt_firstName) || TextUtils.isEmpty(txt_lastName) ||
-                        TextUtils.isEmpty(txt_contact) || TextUtils.isEmpty(txt_email) ||
-                        TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_confirmPassword)
-                ) {
-                    toast(RegisterActivity.this, "Please fill all the fields!");
-                } else if (txt_password.length() < 6 || !txt_confirmPassword.equals(txt_password)) {
-                    toast(RegisterActivity.this, "Password too short!");
+                if (hasError()) {
+                    Toast.makeText(getApplicationContext(),"Remove above errors",Toast.LENGTH_SHORT).show();
                 } else {
                     registerUser(user, txt_email, txt_password);
                 }
             }
-            }
         });
+    }
+    private boolean hasError(){
+        return firstName.getError() != null || lastName.getError() != null || contact.getError() != null
+                || email.getError()!= null || password.getError()!= null || confirmPassword.getError()!= null;
+    }
+    private void validatePasswordLength(){
+        String pass = password.getText().toString().trim();
+        if(pass.length()<6)
+        {
+            password.setError("Password length must be 6 characters");
+        }else{
+            password.setError(null);
+        }
+    }
+    private void validateConfirmPassword(){
+        String pass = password.getText().toString().trim();
+        String confirmpass = confirmPassword.getText().toString().trim();
+        if(!pass.equals(confirmpass))
+            confirmPassword.setError("Should be same as password");
+        else
+            confirmPassword.setError(null);
+    }
+    private void validateContact(){
+        String number = contact.getText().toString().trim();
+        if(number.length()!=10)
+        {
+            contact.setError("Number can be 10 digits only");
+        }
+        else
+            contact.setError(null);
+    }
+    private boolean validateEmpty(EditText et){
+        String enteredText = et.getText().toString().trim();
+        if(enteredText == null|| enteredText.isEmpty())
+        {
+            et.setError("Field cannot be empty");
+            return true;
+        }
+        else{
+            et.setError(null);
+        }
+        return false;
+    }
+    private void validateAndHandleEmail() {
+        String enteredText = email.getText().toString().trim();
+
+        if (!isValidEmail(enteredText)) {
+            email.setError("Invalid email address");
+        }
+        else {
+            email.setError(null);
+        }
+    }
+
+    private boolean isValidEmail(String email) {
+        // Perform your email validation here
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     private void registerUser(User user, String email, String passWord) {
@@ -88,7 +187,6 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-
                     DatabaseReference usersRef = firebaseDatabase.getReference("users");
                     String userId = auth.getCurrentUser().getUid();
                     user.setId(userId);
@@ -100,7 +198,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
-                                finish();
                             } else {
                                 auth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -132,7 +229,6 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        finish();
     }
     private void toast(Context context, String text){
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
