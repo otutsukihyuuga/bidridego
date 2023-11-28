@@ -11,13 +11,17 @@ import android.view.ViewGroup;
 import com.bidridego.R;
 import com.bidridego.driver.BidingDialog;
 import com.bidridego.models.Trip;
+import com.bidridego.utils.DateTimeUtils;
 import com.bidridego.viewadapter.UserUpcomingTripAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A fragment representing a list of Items.
@@ -41,9 +45,40 @@ public class FragmentUpcomingTrips extends Fragment {
         // Initialize Adapter
         adapter = new UserUpcomingTripAdapter(R.layout.user_fragment_upcoming_trips, tripArrayList, getContext());
         recyclerView.setAdapter(adapter);
-        databaseReferenceToTrips.addListenerForSingleValueEvent(new ValueEventListener() {
+//        databaseReferenceToTrips.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                snapshot.getChildren().forEach(e->{
+//                    tripArrayList.add(e.getValue(Trip.class));
+//                });
+//                adapter.notifyDataSetChanged();
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+        // Populate your dataset and update the adapter as needed
+
+//        adapter.setOnItemClickListener(position -> {
+//            Trip trip = tripArrayList.get(position);
+//            BidingDialog biddingDialog = new BidingDialog();
+//            biddingDialog.setTrip(trip);
+//            biddingDialog.show(getActivity().getSupportFragmentManager(), "BidingDialogTag");
+////                startActivity(new Intent(getActivity(), BidDetails.class).putExtras(bundle));
+//        });
+
+        String filterDate;
+        try {
+            filterDate = DateTimeUtils.getTimeStampFromDate(new Date());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        databaseReferenceToTrips.orderByChild("dateAndTime").startAt(filterDate).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                tripArrayList.clear();
                 snapshot.getChildren().forEach(e->{
                     tripArrayList.add(e.getValue(Trip.class));
                 });
@@ -52,18 +87,6 @@ public class FragmentUpcomingTrips extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-        // Populate your dataset and update the adapter as needed
-
-        adapter.setOnItemClickListener(new UserUpcomingTripAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Trip trip = tripArrayList.get(position);
-                BidingDialog biddingDialog = new BidingDialog();
-                biddingDialog.setTrip(trip);
-                biddingDialog.show(getActivity().getSupportFragmentManager(), "BidingDialogTag");
-//                startActivity(new Intent(getActivity(), BidDetails.class).putExtras(bundle));
             }
         });
         return rootView;

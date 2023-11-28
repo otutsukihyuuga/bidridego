@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import com.bidridego.DriverMainActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class BecomeDriverDialog extends DialogFragment {
 
@@ -25,6 +27,7 @@ public class BecomeDriverDialog extends DialogFragment {
                     /**
                      * TODO: update the role of the user to driver
                      * **/
+                    FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid()).child("role").setValue("driver");
                     if (preferences != null) {
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString("localRole", "driver");

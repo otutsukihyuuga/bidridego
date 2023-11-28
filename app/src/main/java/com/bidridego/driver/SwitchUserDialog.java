@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import com.bidridego.UserMainActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SwitchUserDialog extends DialogFragment {
 
@@ -24,6 +26,8 @@ public class SwitchUserDialog extends DialogFragment {
                 .setMessage("Do you want to switch to User?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     SharedPreferences preferences = getActivity().getSharedPreferences("BidRigeGo", Context.MODE_PRIVATE);
+
+                    FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid()).child("role").setValue("user");
                     if (preferences != null) {
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString("localRole", "user");
