@@ -57,13 +57,18 @@ public class BidingDialog extends DialogFragment {
 
         sendButton.setEnabled(false);
         sendButton.setOnClickListener(v -> {
-            Bid bid = new Bid(FirebaseAuth.getInstance().getCurrentUser().getUid(), Double.parseDouble(priceEditText.getText().toString()));
-            trip.setMinBid(bid.getBidValue());
-            String driverID = bid.getDriverID();
-            HashMap<String, Double> bids = new HashMap();
 
-            bids.put(driverID, bid.getBidValue());
+            String driverUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            double currBid = Double.parseDouble(priceEditText.getText().toString());
+            double currMinBid = trip.getMinBid();
+
+            if(currMinBid > currBid)trip.setMinBid(currBid);
+
+            HashMap<String, Double> bids = trip.getBids();
+            bids.put(driverUID, currBid);
+
             trip.setBids(bids);
+
             TripService.getInstance().saveOrUpdate(trip);
         });
 
