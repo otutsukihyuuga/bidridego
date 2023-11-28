@@ -34,19 +34,9 @@ public class HomeActivity extends AppCompatActivity {
         register  =findViewById(R.id.register);
         login = findViewById(R.id.login);
 
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this , RegisterActivity.class));
-            }
-        });
+        register.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this , RegisterActivity.class)));
 
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this , LoginActivity.class));
-            }
-        });
+        login.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this , LoginActivity.class)));
         // Check if the user is already authenticated
         checkAuthentication();
     }

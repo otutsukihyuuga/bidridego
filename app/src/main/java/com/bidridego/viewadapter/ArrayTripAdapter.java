@@ -1,5 +1,6 @@
 package com.bidridego.viewadapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bidridego.models.BidRideLocation;
 import com.bidridego.models.Trip;
 import com.bidridego.models.User;
+import com.bidridego.utils.DateTimeUtils;
 import com.bidridego.viewholder.TripViewHolder;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
@@ -59,7 +61,7 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final TripViewHolder tripViewHolder, final int listPosition) {
+    public void onBindViewHolder(final TripViewHolder tripViewHolder, @SuppressLint("RecyclerView") final int listPosition) {
         TextView cost = tripViewHolder.cost;
         TextView destination = tripViewHolder.destination;
         TextView source = tripViewHolder.source;
@@ -78,7 +80,7 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
                 time.setText(dateTime[1]);
                 Date dateData = parseDate(dateTime[0], "dd/MM/yyyy");
 
-                String outputDate = formatDate(dateData, "dd MMMM yyyy");
+                String outputDate = DateTimeUtils.formatDate(dateData, "dd MMMM yyyy");
                 date.setText(outputDate);
                 time.setText(dateTime[1]);
             }
@@ -93,13 +95,13 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
                 }
             });
             String driverID = FirebaseAuth.getInstance().getUid();
-            cost.setText("" + currTrip.getBids().getOrDefault(driverID, currTrip.getCost()));
+            cost.setText("CAD " + currTrip.getBids().getOrDefault(driverID, currTrip.getCost()));
 
             if(currTrip.getMinBid() > 0) {
-                tripWhos.setText("Your");
+                tripWhos.setText("Your:");
                 minBid.setText(String.valueOf(currTrip.getMinBid()));
             }else {
-                tripWhos.setText("Budget");
+                tripWhos.setText("Budget:");
             }
 
             BidRideLocation to = currTrip.getTo();
@@ -123,15 +125,6 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
             return sdf.parse(dateStr);
         } catch (ParseException e) {
             e.printStackTrace();
-            return null;
-        }
-    }
-
-    private static String formatDate(Date date, String outputFormat) {
-        if (date != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat(outputFormat, Locale.getDefault());
-            return sdf.format(date);
-        } else {
             return null;
         }
     }

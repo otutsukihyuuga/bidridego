@@ -62,7 +62,7 @@ public class BidingDialog extends DialogFragment {
             double currBid = Double.parseDouble(priceEditText.getText().toString());
             double currMinBid = trip.getMinBid();
 
-            if(currMinBid > currBid)trip.setMinBid(currBid);
+            if(currMinBid > currBid || currMinBid == 0)trip.setMinBid(currBid);
 
             HashMap<String, Double> bids = trip.getBids();
             bids.put(driverUID, currBid);

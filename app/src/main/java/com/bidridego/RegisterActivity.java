@@ -54,12 +54,12 @@ public class RegisterActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String txt_firstName = firstName.getText().toString();
-                String txt_lastName = lastName.getText().toString();
-                String txt_email = email.getText().toString();
-                String txt_contact = contact.getText().toString();
-                String txt_password = password.getText().toString();
-                String txt_confirmPassword = confirmPassword.getText().toString();
+                String txt_firstName = firstName.getText().toString().trim();
+                String txt_lastName = lastName.getText().toString().trim();
+                String txt_email = email.getText().toString().trim();
+                String txt_contact = contact.getText().toString().trim();
+                String txt_password = password.getText().toString().trim();
+                String txt_confirmPassword = confirmPassword.getText().toString().trim();
                 if (!txt_confirmPassword.equals(txt_password)) {
                     // Passwords do not match, show Toast message
                     toast(RegisterActivity.this, "Password and Confirm Password aren't same ");
@@ -84,44 +84,34 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerUser(User user, String email, String passWord) {
 
-        auth.createUserWithEmailAndPassword(email, passWord).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
+        auth.createUserWithEmailAndPassword(email, passWord).addOnCompleteListener(RegisterActivity.this, task -> {
+            if (task.isSuccessful()) {
 
-                    DatabaseReference usersRef = firebaseDatabase.getReference("users");
-                    String userId = auth.getCurrentUser().getUid();
-                    user.setId(userId);
-                    usersRef.child(userId).setValue(user).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> databaseTask) {
-                            if (databaseTask.isSuccessful()) {
-                                toast(RegisterActivity.this, "Registration successful!");
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                finish();
+                DatabaseReference usersRef = firebaseDatabase.getReference("users");
+                String userId = auth.getCurrentUser().getUid();
+                user.setId(userId);
+                usersRef.child(userId).setValue(user).addOnCompleteListener(RegisterActivity.this, databaseTask -> {
+                    if (databaseTask.isSuccessful()) {
+                        toast(RegisterActivity.this, "Registration successful!");
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        logout();
+                        startActivity(intent);
+//                        finish();
+                    } else {
+                        auth.getCurrentUser().delete().addOnCompleteListener(authTask -> {
+                            if (authTask.isSuccessful()) {
+                                toast(RegisterActivity.this, "Failed to save user data! User account deleted.");
                             } else {
-                                auth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> authTask) {
-                                        if (authTask.isSuccessful()) {
-                                            toast(RegisterActivity.this, "Failed to save user data! User account deleted.");
-                                        } else {
-                                            toast(RegisterActivity.this, "Failed to save user data! Failed to delete user account.");
-                                        }
-                                    }
-                                });
+                                toast(RegisterActivity.this, "Failed to save user data! Failed to delete user account.");
                             }
-                        }
-                    });
-                } else {
-                    toast(RegisterActivity.this, "Registration failed!");
-                }
+                        });
+                    }
+                });
+            } else {
+                toast(RegisterActivity.this, "Registration failed!");
             }
         });
-        logout();
-
     }
 
     public void logout() {
