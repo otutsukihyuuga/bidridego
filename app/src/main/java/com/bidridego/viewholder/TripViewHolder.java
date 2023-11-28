@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bidridego.R;
 
 public class TripViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    public TextView cost, destination, source, minBid,  date, time;
+    public TextView cost, destination, source, minBid,  date, time, tripWhos;
     public TripViewHolder(View tripView) {
         super(tripView);
         date = tripView.findViewById(R.id.trip_date);
@@ -18,6 +18,7 @@ public class TripViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         destination = tripView.findViewById(R.id.trip_destination);
         source = tripView.findViewById(R.id.trip_source);
         minBid = tripView.findViewById(R.id.trip_min_bid);
+        tripWhos = tripView.findViewById(R.id.trip_whos);
         tripView.setOnClickListener(this);
     }
 

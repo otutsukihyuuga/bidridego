@@ -15,6 +15,7 @@ import com.bidridego.models.Trip;
 import com.bidridego.models.User;
 import com.bidridego.viewholder.TripViewHolder;
 import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -65,16 +66,22 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
         TextView date = tripViewHolder.date;
         TextView time = tripViewHolder.time;
         TextView minBid = tripViewHolder.minBid;
+        TextView tripWhos = tripViewHolder.tripWhos;
 
         Trip currTrip = this.tripList.get(listPosition);
 
 
         if(currTrip != null){
-            Date dateData = parseDate(currTrip.getDate(), "dd/MM/yyyy");
+            String[] dateTime = currTrip.getDateAndTime().split(" ");
+            if(dateTime.length == 2){
+                date.setText(dateTime[0]);
+                time.setText(dateTime[1]);
+                Date dateData = parseDate(dateTime[0], "dd/MM/yyyy");
 
-            String outputDate = formatDate(dateData, "dd MMMM yyyy");
-            date.setText(outputDate);
-            time.setText(currTrip.getTime());
+                String outputDate = formatDate(dateData, "dd MMMM yyyy");
+                date.setText(outputDate);
+                time.setText(dateTime[1]);
+            }
             FirebaseDatabase.getInstance().getReference("users").child(currTrip.getPostedBy()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -85,10 +92,14 @@ public class ArrayTripAdapter extends RecyclerView.Adapter<TripViewHolder> {
 
                 }
             });
-            cost.setText("" + currTrip.getCost());
+            String driverID = FirebaseAuth.getInstance().getUid();
+            cost.setText("" + currTrip.getBids().getOrDefault(driverID, currTrip.getCost()));
 
             if(currTrip.getMinBid() > 0) {
+                tripWhos.setText("Your");
                 minBid.setText(String.valueOf(currTrip.getMinBid()));
+            }else {
+                tripWhos.setText("Budget");
             }
 
             BidRideLocation to = currTrip.getTo();

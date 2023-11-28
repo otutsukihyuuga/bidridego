@@ -15,6 +15,7 @@ import com.bidridego.BidDetails;
 import com.bidridego.R;
 import com.bidridego.models.BidRideLocation;
 import com.bidridego.models.Trip;
+import com.bidridego.utils.DateTimeUtils;
 import com.bidridego.viewadapter.ArrayTripAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +24,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class DriverTripsListFragment  extends Fragment {
 
@@ -58,7 +61,13 @@ public class DriverTripsListFragment  extends Fragment {
 //            }
 //        });
 
-        databaseReferenceToTrips.addValueEventListener(new ValueEventListener() {
+        String filterDate;
+        try {
+            filterDate = DateTimeUtils.getTimeStampFromDate(new Date());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        databaseReferenceToTrips.orderByChild("dateAndTime").startAt(filterDate).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 tripArrayList.clear();

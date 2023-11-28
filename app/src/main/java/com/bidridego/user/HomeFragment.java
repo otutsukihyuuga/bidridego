@@ -121,8 +121,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         AtomicBoolean isFromSet = new AtomicBoolean(false);
 
         rideNow.setOnClickListener(v -> {
+            String dateData = date.getText().toString();
+            String timeData = time.getText().toString();
+            trip.setDateAndTime(dateData + " " + timeData);
             TripService.getInstance().saveOrUpdate(trip);
         });
+
         rideTypeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton radioButton = rootView.findViewById(checkedId);
             trip.setRideType(String.valueOf(radioButton.getText()));
@@ -135,7 +139,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     date.setText(String.valueOf(dayOfMonth)+'/'+String.valueOf(month)+'/'+String.valueOf(year));
-                    trip.setDate(date.getText().toString());
                     isValidTrip(trip);
                 }
             }, 2023, 11, 11);
@@ -154,7 +157,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     hr += String.valueOf(hourOfDay);
                     min += String.valueOf(minute);
                     time.setText(hr+":"+min);
-                    trip.setTime(time.getText().toString());
                     isValidTrip(trip);
                 }
             }, 0, 0, true);
@@ -371,11 +373,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private boolean isValidTrip(Trip trip){
         boolean result = false;
+        String dateString = date.getText().toString();
+        String timeString = time.getText().toString();
         if(
                 (trip.getCost() > 0) &&
                         (trip.getPassengers() > 0)&&
-                        (trip.getDate() != null && !trip.getDate().trim().isEmpty())&&
-                        (trip.getTime() != null && !trip.getTime().trim().isEmpty())&&
+                        ( dateString != "")&&
+                        ( timeString != "")&&
                         (trip.getFrom() != null)&&
                         (trip.getTo() != null)&&
                         (trip.getPostedBy() != null && !trip.getPostedBy().trim().isEmpty())&&

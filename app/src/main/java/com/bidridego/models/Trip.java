@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class Trip {
-    public Trip(String id, double cost, BidRideLocation to, BidRideLocation from, double distance, String postedBy, int passengers, String date, String time, boolean isCarPool, String rideType) {
+    public Trip(String id, double cost, BidRideLocation to, BidRideLocation from, double distance, String postedBy, int passengers, String dateAndTime, boolean isCarPool, String rideType) {
         this.id = id;
         this.cost = cost;
         this.to = to;
@@ -13,8 +13,7 @@ public class Trip {
         this.distance = distance;
         this.postedBy = postedBy;
         this.passengers = passengers;
-        this.date = date;
-        this.time = time;
+        this.dateAndTime = dateAndTime;
         this.isCarPool = isCarPool;
         this.rideType = rideType;
     }
@@ -28,9 +27,7 @@ public class Trip {
     private double distance;
     private String postedBy;
     private int passengers;
-
-    private String date;
-    private String time;
+    private String dateAndTime;
     private boolean isCarPool = false;
     private String rideType;
     private double minBid;
@@ -93,20 +90,12 @@ public class Trip {
         this.passengers = passengers;
     }
 
-    public String getDate() {
-        return this.date;
+    public String getDateAndTime() {
+        return dateAndTime;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getTime() {
-        return this.time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
+    public void setDateAndTime(String dateAndTime) {
+        this.dateAndTime = dateAndTime;
     }
 
     public boolean isCarPool() {
