@@ -8,13 +8,13 @@ import android.widget.ListView;
 public class triplist extends AppCompatActivity {
 
     ListView Users;
-    String() user;
+    String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_triplist);
-        Users = findViewById(R.id.Users);
-        user = new
+//        Users = fieldsndViewById(R.id.Users);
+//        user = new
     }
 }

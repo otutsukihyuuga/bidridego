@@ -62,6 +62,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -130,13 +131,30 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             isValidTrip(trip);
         });
 
+        AtomicBoolean isDateTimeSet = new AtomicBoolean(false);
+
+
+
         date.setOnClickListener(v -> {
+
             DatePickerDialog dialog = new DatePickerDialog(mThis, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    date.setText(String.valueOf(dayOfMonth)+'/'+String.valueOf(month)+'/'+String.valueOf(year));
-                    trip.setDate(date.getText().toString());
-                    isValidTrip(trip);
+                    Calendar selectedDateTime = Calendar.getInstance();
+                    selectedDateTime.set(year, month, dayOfMonth);
+
+                    Calendar currentDateTime = Calendar.getInstance();
+                    if (selectedDateTime.before(currentDateTime)) {
+                        // User selected a past date
+                        Toast.makeText(mThis, "Please select a date from today or later.", Toast.LENGTH_SHORT).show();
+                    } else {
+
+                        date.setText(String.valueOf(dayOfMonth) + '/' + String.valueOf(month) + '/' + String.valueOf(year));
+                        trip.setDate(date.getText().toString());
+                        isValidTrip(trip);
+                        isDateTimeSet.set(true);
+
+                    }
                 }
             }, 2023, 11, 11);
             dialog.show();
@@ -146,16 +164,26 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             TimePickerDialog dialog = new TimePickerDialog(mThis, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    String hr="", min="";
-                    if(hourOfDay<10)
-                        hr = "0";
-                    if(minute<10)
-                        min = "0";
-                    hr += String.valueOf(hourOfDay);
-                    min += String.valueOf(minute);
-                    time.setText(hr+":"+min);
-                    trip.setTime(time.getText().toString());
-                    isValidTrip(trip);
+
+                    Calendar currentTime = Calendar.getInstance();
+                    Calendar selectedTime = Calendar.getInstance();
+                    selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    selectedTime.set(Calendar.MINUTE, minute);
+
+
+
+                    if (selectedTime.before(currentTime)) {
+                        // User selected a past time
+                        Toast.makeText(mThis, "Please select a time from now or later.", Toast.LENGTH_SHORT).show();
+                    } else {
+
+                        String hr = String.format(Locale.getDefault(), "%02d", hourOfDay);
+                        String min = String.format(Locale.getDefault(), "%02d", minute);
+                        String formattedTime = hr + ":" + min;
+                        time.setText(hr + ":" + min);
+                        trip.setTime(time.getText().toString());
+                        isValidTrip(trip);
+                    }
                 }
             }, 0, 0, true);
             dialog.show();
