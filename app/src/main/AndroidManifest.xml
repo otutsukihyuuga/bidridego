@@ -40,7 +40,7 @@
         <activity
             android:name=".RegisterActivity"
             android:exported="false"
-            android:parentActivityName=".LoginActivity" />
+            android:parentActivityName=".HomeActivity" />
         <activity
             android:name=".HomeActivity"
             android:exported="true"
