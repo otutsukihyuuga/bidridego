@@ -14,6 +14,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +40,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bidridego.R;
+import com.bidridego.RegisterActivity;
 import com.bidridego.UserMainActivity;
 import com.bidridego.models.BidRideLocation;
 import com.bidridego.models.Trip;
@@ -117,6 +120,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         time = rootView.findViewById(R.id.time);
         cost = rootView.findViewById(R.id.cost);
         passengers = rootView.findViewById(R.id.seats);
+        passengers.setFilters(new InputFilter[]{new RangeInputFilter(1, 4)});
         isCarPool = rootView.findViewById(R.id.is_car_pool);
         rideTypeRadioGroup = rootView.findViewById(R.id.ride_type_radio_group);
         rideNow = rootView.findViewById(R.id.ride_now);
@@ -331,26 +335,26 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        passengers.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    trip.setPassengers(Integer.parseInt(s.toString()));
-                    isValidTrip(trip);
-                } catch (NumberFormatException e) {
-                    Toast.makeText(getActivity(), "Error: Invalid number of passengers", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(!s.toString().isEmpty()) trip.setPassengers(Integer.parseInt(s.toString()));
-                isValidTrip(trip);
-            }
-        });
+//        passengers.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                try {
+//                    trip.setPassengers(Integer.parseInt(s.toString()));
+//                    isValidTrip(trip);
+//                } catch (NumberFormatException e) {
+//                    Toast.makeText(getActivity(), "Error: Invalid number of passengers", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                if(!s.toString().isEmpty()) trip.setPassengers(Integer.parseInt(s.toString()));
+//                isValidTrip(trip);
+//            }
+//        });
 
         // Add a TextChangedListener to fetch suggestions as the user types
         sourceEditText.addTextChangedListener(new TextWatcher() {
@@ -705,5 +709,41 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+    public class RangeInputFilter implements InputFilter {
+
+        private int minValue;
+        private int maxValue;
+
+        public RangeInputFilter(int minValue, int maxValue) {
+            this.minValue = minValue;
+            this.maxValue = maxValue;
+        }
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            try {
+                // Combine the existing text with the new input
+                String newValue = dest.subSequence(0, dstart).toString() + source.subSequence(start, end) + dest.subSequence(dend, dest.length()).toString();
+
+                // Parse the new value
+                int input = Integer.parseInt(newValue);
+
+                // Check if the value is within the specified range
+                if (isInRange(minValue, maxValue, input)) {
+                    return null; // Accept the new input
+                } else {
+                    // Reject the new input
+                    return "";
+                }
+            } catch (NumberFormatException e) {
+                // If the input cannot be parsed as an integer, reject it
+                return "";
+            }
+        }
+
+        private boolean isInRange(int minValue, int maxValue, int value) {
+            return value >= minValue && value <= maxValue;
+        }
     }
 }
