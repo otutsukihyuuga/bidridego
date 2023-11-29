@@ -31,13 +31,14 @@ import java.util.Locale;
 public class UserTripBidsAdapter extends RecyclerView.Adapter<UserTripBidsViewHolder> {
     private int trip_row_layout;
     private ArrayList<BidDetails> tripList;
-    private ArrayTripAdapter.OnItemClickListener onItemClickListener;
+    private UserTripBidsAdapter.OnItemClickListener onItemClickListener;
+
 
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
 
-    public void setOnItemClickListener(ArrayTripAdapter.OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -67,7 +68,7 @@ public class UserTripBidsAdapter extends RecyclerView.Adapter<UserTripBidsViewHo
         BidDetails currTrip = this.tripList.get(listPosition);
         if(currTrip != null) {
             bidValue.setText(String.valueOf(currTrip.getBidValue()));
-            driverName.setText(currTrip.getDriver().getFirstName() + " " + currTrip.getDriver().getLastName());
+            driverName.setText(currTrip.getFirstName() + " " + currTrip.getLastName());
         }
         tripViewHolder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
