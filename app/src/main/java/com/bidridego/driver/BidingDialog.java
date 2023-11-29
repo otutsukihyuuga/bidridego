@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -75,13 +76,11 @@ public class BidingDialog extends DialogFragment {
                 @Override
                 public void onSuccess() {
                     // The save or update operation was successful
-                    Snackbar.make(getView(), "Bid amount updated", Snackbar.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onFailure(String errorMessage) {
                     // Handle the case where the save or update operation failed
-                    Snackbar.make(getView(), "Some error occured!", Snackbar.LENGTH_SHORT).show();;
                 }
             });
             dismiss();
