@@ -62,6 +62,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -90,7 +91,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private Switch isCarPool;
     private Button rideNow;
     private RadioGroup rideTypeRadioGroup;
-
+    Trip trip;
+    AtomicBoolean isToSet;
+    AtomicBoolean isFromSet;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -114,11 +117,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         rideTypeRadioGroup = rootView.findViewById(R.id.ride_type_radio_group);
         rideNow = rootView.findViewById(R.id.ride_now);
         rideNow.setEnabled(false);
-        Trip trip = new Trip();
+        trip = new Trip();
 //        trip.setCarPool(false);
         trip.setPostedBy(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        AtomicBoolean isToSet = new AtomicBoolean(false);
-        AtomicBoolean isFromSet = new AtomicBoolean(false);
+        isToSet = new AtomicBoolean(false);
+        isFromSet = new AtomicBoolean(false);
 
         rideNow.setOnClickListener(v -> {
             String dateData = date.getText().toString();
@@ -134,33 +137,67 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
 
         date.setOnClickListener(v -> {
-            DatePickerDialog dialog = new DatePickerDialog(mThis, new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    date.setText(String.valueOf(dayOfMonth)+'/'+String.valueOf(month)+'/'+String.valueOf(year));
-                    isValidTrip(trip);
-                }
-            }, 2023, 11, 11);
-            dialog.show();
+
+                // Get the current date
+                Calendar calendar = Calendar.getInstance();
+                int currentYear = calendar.get(Calendar.YEAR);
+                int currentMonth = calendar.get(Calendar.MONTH);
+                int currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+                // Create a DatePickerDialog
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        mThis,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDayOfMonth) {
+                                if (selectedYear > currentYear ||
+                                        (selectedYear == currentYear && selectedMonth > currentMonth) ||
+                                        (selectedYear == currentYear && selectedMonth == currentMonth && selectedDayOfMonth >= currentDayOfMonth)) {
+                                    date.setText(selectedDayOfMonth + "/" + (selectedMonth + 1) + "/" + selectedYear);
+                                } else {
+                                    Toast.makeText(mThis, "Please select a future date", Toast.LENGTH_SHORT).show();
+                                    date.setText(currentDayOfMonth + "/" + (currentMonth + 1) + "/" + currentYear);
+                                }
+                            }
+                        },
+                        currentYear, currentMonth, currentDayOfMonth
+                );
+
+                // Show the dialog
+                datePickerDialog.show();
         });
 
         time.setOnClickListener(v -> {
             TimePickerDialog dialog = new TimePickerDialog(mThis, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    String hr="", min="";
-                    if(hourOfDay<10)
-                        hr = "0";
-                    if(minute<10)
-                        min = "0";
-                    hr += String.valueOf(hourOfDay);
-                    min += String.valueOf(minute);
-                    time.setText(hr+":"+min);
-                    isValidTrip(trip);
+                    // Get the current time
+                    Calendar currentTime = Calendar.getInstance();
+                    int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+                    int currentMinute = currentTime.get(Calendar.MINUTE);
+
+                    // Check if the selected time is in the future
+                    if (hourOfDay > currentHour || (hourOfDay == currentHour && minute >= currentMinute)) {
+                        // Format the time
+                        String hr = (hourOfDay < 10) ? "0" + hourOfDay : String.valueOf(hourOfDay);
+                        String min = (minute < 10) ? "0" + minute : String.valueOf(minute);
+
+                        // Update the TextView with the selected time
+                        time.setText(hr + ":" + min);
+                        isValidTrip(trip);
+                    } else {
+                        // Show a message or take appropriate action
+                        Toast.makeText(mThis, "Please select a future time", Toast.LENGTH_SHORT).show();
+                        // Optionally, you can reset the time to the current time
+                        String currentHr = (currentHour < 10) ? "0" + currentHour : String.valueOf(currentHour);
+                        String currentMin = (currentMinute < 10) ? "0" + currentMinute : String.valueOf(currentMinute);
+                        time.setText(currentHr + ":" + currentMin);
+                    }
                 }
             }, 0, 0, true);
             dialog.show();
         });
+
         isCarPool.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 trip.setCarPool(true);
@@ -593,7 +630,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                         // Move the camera to the current location
                         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                         // Display the name of the current location in a toast
-                        showLocationName(latitude, longitude);
+                        String locationName = showLocationName(latitude, longitude);
+                        if(locationName != null) {
+                            BidRideLocation to = new BidRideLocation(latitude, longitude, locationName);
+                            trip.setTo(to);
+                            isToSet.set(true);
+                            if(isFromSet.get()) trip.setDistance(distance(trip.getFrom(), to));
+                            isValidTrip(trip);
+                        }
                         // Remove location updates after the first successful update
                         locationManager.removeUpdates(this);
                         isFirstLocationUpdate = false;
@@ -618,17 +662,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             });
         }
     }
-    private void showLocationName(double latitude, double longitude) {
+    private String showLocationName(double latitude, double longitude) {
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses != null && addresses.size() > 0) {
                 Address address = addresses.get(0);
                 String locationName = address.getAddressLine(0); // You can customize this based on your needs
                 sourceEditText.setText(locationName);
+                return locationName;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     private void showToast(String message) {

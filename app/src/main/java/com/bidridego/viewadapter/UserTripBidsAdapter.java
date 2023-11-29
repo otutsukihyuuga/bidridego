@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bidridego.models.BidDetails;
 import com.bidridego.models.BidRideLocation;
 import com.bidridego.models.Trip;
 import com.bidridego.utils.DateTimeUtils;
@@ -29,7 +30,7 @@ import java.util.Locale;
 
 public class UserTripBidsAdapter extends RecyclerView.Adapter<UserTripBidsViewHolder> {
     private int trip_row_layout;
-    private ArrayList<Trip> tripList;
+    private ArrayList<BidDetails> tripList;
     private ArrayTripAdapter.OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
@@ -40,7 +41,7 @@ public class UserTripBidsAdapter extends RecyclerView.Adapter<UserTripBidsViewHo
         this.onItemClickListener = onItemClickListener;
     }
 
-    public UserTripBidsAdapter(int trip_row_layout_as_id, ArrayList<Trip> tripList, Context context) {
+    public UserTripBidsAdapter(int trip_row_layout_as_id, ArrayList<BidDetails> tripList, Context context) {
         this.trip_row_layout = trip_row_layout_as_id;
         this.tripList = tripList;
     }
@@ -63,59 +64,15 @@ public class UserTripBidsAdapter extends RecyclerView.Adapter<UserTripBidsViewHo
         TextView bidValue = tripViewHolder.bidValue;
         TextView driverName = tripViewHolder.driverName;
 
-        Trip currTrip = this.tripList.get(listPosition);
-
-
-        if(currTrip != null){
-            String[] dateTime = currTrip.getDateAndTime().split(" ");
-            if(dateTime.length == 2){
-//                date.setText(dateTime[0]);
-//                time.setText(dateTime[1]);
-                Date dateData = parseDate(dateTime[0], "dd/MM/yyyy");
-
-                String outputDate = DateTimeUtils.formatDate(dateData, "dd MMMM yyyy");
-//                date.setText(outputDate);
-//                time.setText(dateTime[1]);
-            }
-            FirebaseDatabase.getInstance().getReference("users").child(currTrip.getPostedBy()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-            String driverID = FirebaseAuth.getInstance().getUid();
-//            cost.setText("$" + currTrip.getBids().getOrDefault(driverID, currTrip.getCost()));
-
-            if(currTrip.getMinBid() > 0) {
-//                tripWhos.setText("Your:");
-//                minBid.setText("$"+ currTrip.getMinBid());
-            }else {
-//                tripWhos.setText("Budget:");
-            }
-
-            BidRideLocation to = currTrip.getTo();
-            BidRideLocation from = currTrip.getFrom();
-
-//            if(to != null) destination.setText(to.getLocationName());
-//            if(from != null) source.setText(from.getLocationName());
+        BidDetails currTrip = this.tripList.get(listPosition);
+        if(currTrip != null) {
+            bidValue.setText(String.valueOf(currTrip.getBidValue()));
+            driverName.setText(currTrip.getDriver().getFirstName() + currTrip.getDriver().getLastName());
         }
         tripViewHolder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(listPosition);
             }
         });
-    }
-    private static Date parseDate(String dateStr, String inputFormat) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat(inputFormat, Locale.getDefault());
-            return sdf.parse(dateStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }
