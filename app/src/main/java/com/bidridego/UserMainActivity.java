@@ -40,13 +40,7 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.userAppBarMain.toolbar);
-        binding.userAppBarMain.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         // Initialize SharedPreferences
         preferences = getSharedPreferences("BidRigeGo", Context.MODE_PRIVATE);
         setupNavigationDrawer();
