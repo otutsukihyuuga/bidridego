@@ -1,13 +1,17 @@
 package com.bidridego.user;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
+
 import com.bidridego.R;
+import com.bidridego.models.BidDetails;
 import com.bidridego.models.Trip;
-import com.bidridego.utils.DateTimeUtils;
+import com.bidridego.models.User;
 import com.bidridego.viewadapter.UserTripBidsAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,51 +19,78 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserTripBidsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private UserTripBidsAdapter adapter;
-    public ArrayList<Trip> tripArrayList;
+    public ArrayList<BidDetails> tripArrayList;
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReferenceToTrips;
+    private HashMap<String, Double> bids;
+    TextView bidsSource, bidsDestination, bidsDate, bidsTime;
+
+    //    private DatabaseReference databaseReferenceToTrips;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_trip_bids);
+        bidsSource = findViewById(R.id.bids_source);
+        bidsDestination = findViewById(R.id.bids_destination);
+        bidsDate = findViewById(R.id.bids_date);
+        bidsTime = findViewById(R.id.bids_time);
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReferenceToTrips = firebaseDatabase.getReference("trips");
-        // Initialize RecyclerView
-        recyclerView = findViewById(R.id.user_trip_bids);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        tripArrayList = new ArrayList <>();
-        // Initialize Adapter
-        adapter = new UserTripBidsAdapter(R.layout.user_trip_bids_list_item, tripArrayList, this);
-        recyclerView.setAdapter(adapter);
+        tripArrayList = new ArrayList<>();
 
-        String filterDate;
-        try {
-            filterDate = DateTimeUtils.getTimeStampFromDate(new Date());
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+
+        // Receive the trip object from the Intent
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("trip")) {
+            Trip trip = intent.getParcelableExtra("trip");
+
+            // Now you have the 'trip' object, you can use it as needed
+            if (trip != null) {
+                // Example: Access trip details
+                String source = trip.getFrom().getLocationName();
+                String destination = trip.getTo().getLocationName();
+                String[] dateTime = trip.getDateAndTime().split(" ");
+                bidsDate.setText(dateTime[0]);
+                bidsTime.setText(dateTime[1]);
+                bidsSource.setText(source);
+                bidsDestination.setText(destination);
+                bids = trip.getBids();
+                for (Map.Entry<String, Double> entry : bids.entrySet()) {
+                    String driverId = entry.getKey();
+                    Double bidValue = entry.getValue();
+                    DatabaseReference usersRef = firebaseDatabase.getReference("users");
+                    usersRef.child(driverId).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                User driver = dataSnapshot.getValue(User.class);
+                                BidDetails bidDetails = new BidDetails(driverId, bidValue, driver);
+                                tripArrayList.add(bidDetails);
+                                adapter.notifyDataSetChanged();
+
+                            } else {
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            // Handle errors
+                        }
+                    });
+                }
+            }
+
+            recyclerView = findViewById(R.id.user_trip_bids);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            // Initialize Adapter
+            adapter = new UserTripBidsAdapter(R.layout.user_trip_bids_list_item, tripArrayList, this);
+            recyclerView.setAdapter(adapter);
         }
-
-        databaseReferenceToTrips.orderByChild("dateAndTime").startAt(filterDate).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                tripArrayList.clear();
-                snapshot.getChildren().forEach(e->{
-                    tripArrayList.add(e.getValue(Trip.class));
-                });
-                adapter.notifyDataSetChanged();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 }

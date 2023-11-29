@@ -19,25 +19,39 @@
 
         <!-- Source to Destination -->
         <TextView
+            android:id="@+id/bids_source"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Source to Destination"
             android:textSize="18sp"
             android:textColor="@color/black"
             android:textStyle="bold"/>
 
-        <!-- Date, Time, and Distance -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Date: MM/DD/YYYY"
+            android:text="To"
+            android:textSize="12sp"
+            android:textColor="@color/grey"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/bids_destination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+        <!-- Date, Time, and Distance -->
+        <TextView
+            android:id="@+id/bids_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/black"/>
 
         <TextView
+            android:id="@+id/bids_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Time: HH:mm"
             android:textSize="16sp"
             android:textColor="@color/black"/>
 

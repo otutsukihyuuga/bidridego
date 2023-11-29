@@ -72,7 +72,10 @@ public class FragmentUpcomingTrips extends Fragment {
             @Override
             public void onItemClick(int position) {
                 Trip trip = tripArrayList.get(position);
-                startActivity(new Intent(getActivity(), UserTripBidsActivity.class));
+//                Bundle bundle = new Bundle();
+                Intent intent = new Intent(getActivity(), UserTripBidsActivity.class);
+                intent.putExtra("trip",trip);
+                startActivity(intent);
             }
         });
         return rootView;

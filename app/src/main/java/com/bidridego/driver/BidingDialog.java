@@ -19,7 +19,9 @@ import androidx.fragment.app.DialogFragment;
 import com.bidridego.R;
 import com.bidridego.models.Bid;
 import com.bidridego.models.Trip;
+import com.bidridego.services.SaveOrUpdateCallback;
 import com.bidridego.services.TripService;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.HashMap;
@@ -69,7 +71,19 @@ public class BidingDialog extends DialogFragment {
 
             trip.setBids(bids);
 
-            TripService.getInstance().saveOrUpdate(trip);
+            TripService.getInstance().saveOrUpdate(trip, new SaveOrUpdateCallback() {
+                @Override
+                public void onSuccess() {
+                    // The save or update operation was successful
+                    Snackbar.make(getView(), "Bid amount updated", Snackbar.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    // Handle the case where the save or update operation failed
+                    Snackbar.make(getView(), "Some error occured!", Snackbar.LENGTH_SHORT).show();;
+                }
+            });
             dismiss();
         });
 
