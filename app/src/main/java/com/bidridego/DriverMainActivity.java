@@ -35,13 +35,7 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.driverAppBarMain.toolbar);
-        binding.driverAppBarMain.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
