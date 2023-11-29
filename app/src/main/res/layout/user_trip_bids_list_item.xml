@@ -19,7 +19,7 @@
             android:id="@+id/bids_user_circle"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_menu_camera"
+            android:src="@mipmap/ic_car"
             android:padding="8dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/circularbackground"/>
