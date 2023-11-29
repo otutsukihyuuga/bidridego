@@ -335,26 +335,26 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-//        passengers.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                try {
-//                    trip.setPassengers(Integer.parseInt(s.toString()));
-//                    isValidTrip(trip);
-//                } catch (NumberFormatException e) {
-//                    Toast.makeText(getActivity(), "Error: Invalid number of passengers", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                if(!s.toString().isEmpty()) trip.setPassengers(Integer.parseInt(s.toString()));
-//                isValidTrip(trip);
-//            }
-//        });
+        passengers.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    trip.setPassengers(Integer.parseInt(s.toString()));
+                    isValidTrip(trip);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), "Error: Invalid number of passengers", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!s.toString().isEmpty()) trip.setPassengers(Integer.parseInt(s.toString()));
+                isValidTrip(trip);
+            }
+        });
 
         // Add a TextChangedListener to fetch suggestions as the user types
         sourceEditText.addTextChangedListener(new TextWatcher() {
