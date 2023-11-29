@@ -14,6 +14,7 @@ import com.bidridego.driver.BidingDialog;
 import com.bidridego.models.Trip;
 import com.bidridego.utils.DateTimeUtils;
 import com.bidridego.viewadapter.UserUpcomingTripAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,14 +54,17 @@ public class FragmentUpcomingTrips extends Fragment {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
+        String userId = FirebaseAuth.getInstance().getUid();
         databaseReferenceToTrips.orderByChild("dateAndTime").startAt(filterDate).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 tripArrayList.clear();
-                snapshot.getChildren().forEach(e->{
-                    tripArrayList.add(e.getValue(Trip.class));
-                });
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Trip trip = dataSnapshot.getValue(Trip.class);
+                    if (trip != null && trip.getPostedBy().equals(userId)) {
+                        tripArrayList.add(trip);
+                    }
+                }
                 adapter.notifyDataSetChanged();
             }
             @Override
