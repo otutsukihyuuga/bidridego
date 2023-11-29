@@ -84,8 +84,9 @@
         android:padding="8dp"
         android:text="Biding"
         android:textColor="@color/black"
+        android:background="@drawable/borderbackground"
         android:textAlignment="center"
-        android:background="@color/golden"
+        android:gravity="center"
         android:textStyle="bold" />
 
     <LinearLayout
