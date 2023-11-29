@@ -67,7 +67,7 @@ public class UserTripBidsAdapter extends RecyclerView.Adapter<UserTripBidsViewHo
         BidDetails currTrip = this.tripList.get(listPosition);
         if(currTrip != null) {
             bidValue.setText(String.valueOf(currTrip.getBidValue()));
-            driverName.setText(currTrip.getDriver().getFirstName() + currTrip.getDriver().getLastName());
+            driverName.setText(currTrip.getDriver().getFirstName() + " " + currTrip.getDriver().getLastName());
         }
         tripViewHolder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
