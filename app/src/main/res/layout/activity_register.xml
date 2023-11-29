@@ -9,6 +9,13 @@
     tools:context=".RegisterActivity"
     android:padding="10dp"
     android:orientation="vertical">
+    
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circularbackground"
+        android:src="@drawable/userrr"></ImageView>
 
 
 
