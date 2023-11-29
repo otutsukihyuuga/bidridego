@@ -77,11 +77,12 @@
                 style="@style/button" />
 
             <Button
+                android:id="@+id/forgotPassword"
                 style="@style/button"
+                android:layout_marginTop="0dp"
                 android:text="@string/forgotPassword"
-                app:backgroundTint="@color/golden"
                 android:textColor="@color/blue"
-                android:layout_marginTop="0dp"/>
+                app:backgroundTint="@color/golden" />
         </LinearLayout>
 
     </LinearLayout>

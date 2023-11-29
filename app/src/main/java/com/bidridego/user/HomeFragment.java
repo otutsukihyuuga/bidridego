@@ -119,6 +119,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         date = rootView.findViewById(R.id.date);
         time = rootView.findViewById(R.id.time);
         cost = rootView.findViewById(R.id.cost);
+        cost.setFilters(new InputFilter[]{new DecimalInputFilter(0, 10000f,2)});
         passengers = rootView.findViewById(R.id.seats);
         passengers.setFilters(new InputFilter[]{new RangeInputFilter(1, 4)});
         isCarPool = rootView.findViewById(R.id.is_car_pool);
@@ -746,4 +747,53 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             return value >= minValue && value <= maxValue;
         }
     }
+    public class DecimalInputFilter implements InputFilter {
+
+        private float minValue;
+        private float maxValue;
+        private int digitsAfterDecimal;
+
+        public DecimalInputFilter(float minValue, float maxValue, int digitsAfterDecimal) {
+            this.minValue = minValue;
+            this.maxValue = maxValue;
+            this.digitsAfterDecimal = digitsAfterDecimal;
+        }
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            StringBuilder filteredStringBuilder = new StringBuilder(dest);
+
+            // Append the new input to the existing text
+            filteredStringBuilder.insert(dstart, source);
+
+            // Validate the new input
+            if (!isValidInput(filteredStringBuilder.toString())) {
+                // Reject the new input
+                return "";
+            }
+
+            // Check if the resulting float value is within the specified range
+            float newValue;
+            try {
+                newValue = Float.parseFloat(filteredStringBuilder.toString());
+            } catch (NumberFormatException e) {
+                // Invalid float format
+                return "";
+            }
+
+            if (newValue < minValue || newValue > maxValue) {
+                // Reject the new input if outside the specified range
+                return "";
+            }
+
+            return null; // Accept the new input
+        }
+
+        private boolean isValidInput(String input) {
+            // Regex to validate float values with up to two decimal places
+            String regex = "^\\d*(\\.\\d{0," + digitsAfterDecimal + "})?$";
+            return input.matches(regex);
+        }
+    }
+
 }

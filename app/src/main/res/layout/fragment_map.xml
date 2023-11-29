@@ -98,14 +98,15 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/seatsicon"
                 android:background="@color/golden"
-                android:paddingLeft="6dp"
-                android:drawablePadding="10dp"
                 android:backgroundTint="@color/golden"
+                android:drawableLeft="@drawable/seatsicon"
+                android:drawablePadding="10dp"
                 android:ems="10"
                 android:hint="Number of seats"
-                android:inputType="number" />
+                android:inputType="number"
+                android:paddingLeft="6dp"
+                android:singleLine="true" />
 
             <Switch
                 android:id="@+id/is_car_pool"
@@ -145,7 +146,8 @@
                 android:digits="$1234567890."
                 android:ems="10"
                 android:hint="10"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:singleLine="true" />
         </LinearLayout>
 
         <View

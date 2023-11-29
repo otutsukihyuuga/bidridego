@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText email;
     private EditText password;
-    private Button login;
+    private Button login, forgotBtn;
     private TextView registerUser;
 
     private FirebaseAuth auth;
@@ -36,9 +36,16 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         login = findViewById(R.id.login);
         registerUser = findViewById(R.id.register_user);
+        forgotBtn = findViewById(R.id.forgotPassword);
 
         auth = FirebaseAuth.getInstance();
 
+        forgotBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Please Contact the Developer at admin@bidridego.ca",Toast.LENGTH_SHORT).show();
+            }
+        });
         registerUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
