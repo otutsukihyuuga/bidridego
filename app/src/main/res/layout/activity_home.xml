@@ -38,6 +38,7 @@
             app:backgroundTint="@color/golden"
             android:textColor="@color/purple_700"
             android:textStyle="bold"
+            style="@style/button"
             android:layout_height="wrap_content"
             android:layout_below="@id/register"
             android:text="@string/login"
