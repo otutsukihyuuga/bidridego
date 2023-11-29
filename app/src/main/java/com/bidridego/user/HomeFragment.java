@@ -35,10 +35,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bidridego.R;
+import com.bidridego.UserMainActivity;
 import com.bidridego.models.BidRideLocation;
 import com.bidridego.models.Trip;
+import com.bidridego.services.SaveOrUpdateCallback;
 import com.bidridego.services.TripService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,6 +54,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
@@ -120,6 +124,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         trip = new Trip();
 //        trip.setCarPool(false);
         trip.setPostedBy(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        trip.setRideType("SUV");
         isToSet = new AtomicBoolean(false);
         isFromSet = new AtomicBoolean(false);
 
@@ -127,7 +132,25 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             String dateData = date.getText().toString();
             String timeData = time.getText().toString();
             trip.setDateAndTime(dateData + " " + timeData);
-            TripService.getInstance().saveOrUpdate(trip);
+            TripService.getInstance().saveOrUpdate(trip, new SaveOrUpdateCallback() {
+                @Override
+                public void onSuccess() {
+                    // The save or update operation was successful
+                    showSnackbar("Your Trip scheduled!");
+                    UserMainActivity activity = (UserMainActivity) getActivity();
+
+                    // Check if the activity is not null and an instance of UserMainActivity
+                    if (activity != null && activity instanceof UserMainActivity) {
+                        activity.navigateToMyTrips();
+                    }
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    // Handle the case where the save or update operation failed
+                    showSnackbar("Failed to save or update trip: " + errorMessage);
+                }
+            });
         });
 
         rideTypeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
@@ -632,10 +655,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                         // Display the name of the current location in a toast
                         String locationName = showLocationName(latitude, longitude);
                         if(locationName != null) {
-                            BidRideLocation to = new BidRideLocation(latitude, longitude, locationName);
-                            trip.setTo(to);
-                            isToSet.set(true);
-                            if(isFromSet.get()) trip.setDistance(distance(trip.getFrom(), to));
+                            BidRideLocation from = new BidRideLocation(latitude, longitude, locationName);
+                            trip.setFrom(from);
+                            isFromSet.set(true);
+                            if(isToSet.get()) trip.setDistance(distance(trip.getTo(), from));
                             isValidTrip(trip);
                         }
                         // Remove location updates after the first successful update
@@ -675,6 +698,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             e.printStackTrace();
         }
         return null;
+    }
+    private void showSnackbar(String message) {
+        Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
     }
 
     private void showToast(String message) {

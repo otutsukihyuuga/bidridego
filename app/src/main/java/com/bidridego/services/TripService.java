@@ -29,13 +29,24 @@ public class TripService {
         return tripsService;
     }
 
-    public void saveOrUpdate(Trip trip) {
+    public void saveOrUpdate(Trip trip, SaveOrUpdateCallback callback) {
         if (trip.getId() == null) {
             trip.setId(this.databaseReferenceToTrips.push().getKey());
         }
         trip.setPostedBy(auth.getCurrentUser().getUid());
 
-        databaseReferenceToTrips.child(trip.getId()).setValue(trip);
+        databaseReferenceToTrips.child(trip.getId()).setValue(trip)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Save or update operation successful
+                        callback.onSuccess();
+                    } else {
+                        // Save or update operation failed
+                        callback.onFailure(task.getException().getMessage());
+                    }
+                });
+
+        // Additional updates for 'to', 'from', 'minBid', 'bids' can be done similarly
         databaseReferenceToTrips.child(trip.getId()).child("to").setValue(trip.getTo());
         databaseReferenceToTrips.child(trip.getId()).child("from").setValue(trip.getFrom());
         databaseReferenceToTrips.child(trip.getId()).child("minBid").setValue(trip.getMinBid());

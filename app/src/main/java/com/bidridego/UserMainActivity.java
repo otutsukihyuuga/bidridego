@@ -30,7 +30,7 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
     DrawerLayout drawer;
     NavController navController;
     SharedPreferences preferences;
-
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
     }
     private void setupNavigationDrawer() {
         drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+        navigationView = binding.navView;
         // Set the listener for navigation item clicks
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_upcoming_trips, R.id.nav_past_trips, R.id.nav_payment, R.id.nav_become_driver, R.id.nav_logout)
@@ -106,5 +106,11 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
+    }
+    public void navigateToMyTrips() {
+        if (navigationView != null) {
+            navigationView.setCheckedItem(R.id.nav_upcoming_trips);
+            navController.navigate(R.id.nav_upcoming_trips);
+        }
     }
 }
