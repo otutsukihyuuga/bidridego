@@ -70,7 +70,7 @@ public class UserTripBidsActivity extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
                                 User driver = dataSnapshot.getValue(User.class);
-                                BidDetails bidDetails = new BidDetails(driverId, bidValue, driver);
+                                BidDetails bidDetails = new BidDetails(driverId, bidValue, driver.getId(), driver.getFirstName(), driver.getLastName(), driver.getContact());
                                 tripArrayList.add(bidDetails);
                                 adapter.notifyDataSetChanged();
 
@@ -91,6 +91,15 @@ public class UserTripBidsActivity extends AppCompatActivity {
             // Initialize Adapter
             adapter = new UserTripBidsAdapter(R.layout.user_trip_bids_list_item, tripArrayList, this);
             recyclerView.setAdapter(adapter);
+            adapter.setOnItemClickListener(new UserTripBidsAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    BidDetails trip = tripArrayList.get(position);
+                    Intent intent = new Intent(UserTripBidsActivity.this, UserBidDetailsActivity.class);
+                    intent.putExtra("bidDetails",trip);
+                    startActivity(intent);
+                }
+            });
         }
     }
 }
