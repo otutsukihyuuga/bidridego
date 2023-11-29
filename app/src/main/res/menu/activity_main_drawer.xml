@@ -21,10 +21,6 @@
             android:icon="@drawable/drivericon"
             android:title="@string/become_driver" />
         <item
-            android:id="@+id/nav_payment"
-            android:icon="@drawable/paymenticon"
-            android:title="@string/payment" />
-        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/logouticon"
             android:title="@string/logout" />
