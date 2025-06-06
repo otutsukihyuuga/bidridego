@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.bidridego.R;
+import com.bidridego.driver.BidingDialog;
 import com.bidridego.models.BidDetails;
 import com.bidridego.models.Trip;
 import com.bidridego.models.User;
@@ -31,6 +32,7 @@ public class UserTripBidsActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private HashMap<String, Double> bids;
     TextView bidsSource, bidsDestination, bidsDate, bidsTime;
+    Intent prevIntent;
 
     //    private DatabaseReference databaseReferenceToTrips;
     @Override
@@ -46,9 +48,9 @@ public class UserTripBidsActivity extends AppCompatActivity {
 
 
         // Receive the trip object from the Intent
-        Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("trip")) {
-            Trip trip = intent.getParcelableExtra("trip");
+        prevIntent = getIntent();
+        if (prevIntent != null && prevIntent.hasExtra("trip")) {
+            Trip trip = prevIntent.getParcelableExtra("trip");
 
             // Now you have the 'trip' object, you can use it as needed
             if (trip != null) {
@@ -70,7 +72,7 @@ public class UserTripBidsActivity extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
                                 User driver = dataSnapshot.getValue(User.class);
-                                BidDetails bidDetails = new BidDetails(driverId, bidValue, driver);
+                                BidDetails bidDetails = new BidDetails(driver.getId(), bidValue, driver.getId(), driver.getFirstName(), driver.getLastName(), driver.getContact());
                                 tripArrayList.add(bidDetails);
                                 adapter.notifyDataSetChanged();
 
@@ -91,6 +93,18 @@ public class UserTripBidsActivity extends AppCompatActivity {
             // Initialize Adapter
             adapter = new UserTripBidsAdapter(R.layout.user_trip_bids_list_item, tripArrayList, this);
             recyclerView.setAdapter(adapter);
+            adapter.setOnItemClickListener(new UserTripBidsAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    BidDetails bidDetails = tripArrayList.get(position);
+
+                    AcceptBidDialog acceptBidDialog = new AcceptBidDialog();
+                    acceptBidDialog.setDriverId(bidDetails.getDriverID());
+                    acceptBidDialog.setDriverName(bidDetails.getFirstName() + " " + bidDetails.getLastName());
+
+                    acceptBidDialog.show(getSupportFragmentManager(), "AcceptBidDialogTag");
+                }
+            });
         }
     }
 }

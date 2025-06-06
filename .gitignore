@@ -1,15 +1,23 @@
+# IntelliJ/Android Studio module file (deprecated in newer versions)
 *.iml
+# Gradle build files
 .gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+# stores sdk location and can also be used for api keys
+/local.properties 
+# idea files - ignore all except specific files
+.idea/*
+!.idea/modules.xml
+!.idea/misc.xml
+!.idea/runConfigurations/
+!.idea/codeStyles/
+!.idea/inspectionProfiles/
+
+# macos files
 .DS_Store
+# build files can be recreated and has class files and apk files
 /build
+# this is data captured during app profiling and debugging
 /captures
+# these are used for ndk (native development kit c\c++) build
 .externalNativeBuild
 .cxx
-local.properties
