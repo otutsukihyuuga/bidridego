@@ -41,7 +41,7 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_trip_list, R.id.nav_my_bids, R.id.nav_rating, R.id.nav_switch_account, R.id.nav_logout)
+                R.id.nav_trip_list, R.id.nav_switch_account, R.id.nav_logout)
                 .setOpenableLayout(drawer)
                 .build();
         navigationView.setNavigationItemSelectedListener(this);

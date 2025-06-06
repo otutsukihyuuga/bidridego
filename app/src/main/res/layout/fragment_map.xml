@@ -170,7 +170,7 @@
                     android:layout_weight="1"
                     android:textAlignment="center"
                     android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ride_type_radio_btn"
+                    android:drawableTop="@drawable/suv_radio_btn"
                     android:checked="true"
                     android:button="@null"
                     android:text="SUV" />
@@ -180,7 +180,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:textAlignment="center"
-                    android:drawableTop="@drawable/ride_type_radio_btn"
+                    android:drawableTop="@drawable/economy_radio_btn"
                     android:layout_height="wrap_content"
                     android:button="@null"
                     android:text="Economy" />
@@ -189,7 +189,7 @@
                     android:id="@+id/micro"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:drawableTop="@drawable/ride_type_radio_btn"
+                    android:drawableTop="@drawable/micro_radio_btn"
                     android:layout_height="wrap_content"
                     android:button="@null"
                     android:textAlignment="center"

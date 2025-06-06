@@ -50,7 +50,7 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
         navigationView = binding.navView;
         // Set the listener for navigation item clicks
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_upcoming_trips, R.id.nav_past_trips, R.id.nav_payment, R.id.nav_become_driver, R.id.nav_logout)
+                R.id.nav_home, R.id.nav_upcoming_trips, R.id.nav_past_trips, R.id.nav_become_driver, R.id.nav_logout)
                 .setOpenableLayout(drawer)
                 .build();
         navigationView.setNavigationItemSelectedListener(this);
