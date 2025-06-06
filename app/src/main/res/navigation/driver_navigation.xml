@@ -10,6 +10,18 @@
         android:name="com.bidridego.driver.DriverTripsListFragment"
         android:label="@string/driver_trips"
         tools:layout="@layout/recyclerview_list" />
+
+    <fragment
+        android:id="@+id/nav_my_bids"
+        android:name="com.bidridego.ui.gallery.GalleryFragment"
+        android:label="@string/my_bids"
+        tools:layout="@layout/dummy_fragment_gallery" />
+
+    <fragment
+        android:id="@+id/nav_rating"
+        android:name="com.bidridego.ui.slideshow.SlideshowFragment"
+        android:label="@string/rating"
+        tools:layout="@layout/dummy_fragment_slideshow" />
     <fragment
         android:id="@+id/nav_switch_account"
         android:name="com.bidridego.ui.slideshow.SlideshowFragment"

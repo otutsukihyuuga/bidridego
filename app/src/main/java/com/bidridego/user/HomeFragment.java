@@ -174,14 +174,17 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 // Create a DatePickerDialog
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
                         mThis,
-                        (view, selectedYear, selectedMonth, selectedDayOfMonth) -> {
-                            if (selectedYear > currentYear ||
-                                    (selectedYear == currentYear && selectedMonth > currentMonth) ||
-                                    (selectedYear == currentYear && selectedMonth == currentMonth && selectedDayOfMonth >= currentDayOfMonth)) {
-                                date.setText(selectedDayOfMonth + "/" + (selectedMonth + 1) + "/" + selectedYear);
-                            } else {
-                                Toast.makeText(mThis, "Please select a future date", Toast.LENGTH_SHORT).show();
-                                date.setText(currentDayOfMonth + "/" + (currentMonth + 1) + "/" + currentYear);
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDayOfMonth) {
+                                if (selectedYear > currentYear ||
+                                        (selectedYear == currentYear && selectedMonth > currentMonth) ||
+                                        (selectedYear == currentYear && selectedMonth == currentMonth && selectedDayOfMonth >= currentDayOfMonth)) {
+                                    date.setText(selectedDayOfMonth + "/" + (selectedMonth + 1) + "/" + selectedYear);
+                                } else {
+                                    Toast.makeText(mThis, "Please select a future date", Toast.LENGTH_SHORT).show();
+                                    date.setText(currentDayOfMonth + "/" + (currentMonth + 1) + "/" + currentYear);
+                                }
                             }
                         },
                         currentYear, currentMonth, currentDayOfMonth
@@ -192,14 +195,32 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
 
         time.setOnClickListener(v -> {
-            TimePickerDialog dialog = new TimePickerDialog(mThis, (view, hourOfDay, minute) -> {
-                // Format the time
-                String hr = (hourOfDay < 10) ? "0" + hourOfDay : String.valueOf(hourOfDay);
-                String min = (minute < 10) ? "0" + minute : String.valueOf(minute);
+            TimePickerDialog dialog = new TimePickerDialog(mThis, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    // Get the current time
+                    Calendar currentTime = Calendar.getInstance();
+                    int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+                    int currentMinute = currentTime.get(Calendar.MINUTE);
 
-                // Update the TextView with the selected time
-                time.setText(hr + ":" + min);
-                isValidTrip(trip);
+                    // Check if the selected time is in the future
+                    if (hourOfDay > currentHour || (hourOfDay == currentHour && minute >= currentMinute)) {
+                        // Format the time
+                        String hr = (hourOfDay < 10) ? "0" + hourOfDay : String.valueOf(hourOfDay);
+                        String min = (minute < 10) ? "0" + minute : String.valueOf(minute);
+
+                        // Update the TextView with the selected time
+                        time.setText(hr + ":" + min);
+                        isValidTrip(trip);
+                    } else {
+                        // Show a message or take appropriate action
+                        Toast.makeText(mThis, "Please select a future time", Toast.LENGTH_SHORT).show();
+                        // Optionally, you can reset the time to the current time
+                        String currentHr = (currentHour < 10) ? "0" + currentHour : String.valueOf(currentHour);
+                        String currentMin = (currentMinute < 10) ? "0" + currentMinute : String.valueOf(currentMinute);
+                        time.setText(currentHr + ":" + currentMin);
+                    }
+                }
             }, 0, 0, true);
             dialog.show();
         });
@@ -314,26 +335,26 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        passengers.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    trip.setPassengers(Integer.parseInt(s.toString()));
-                    isValidTrip(trip);
-                } catch (NumberFormatException e) {
-                    Toast.makeText(getActivity(), "Error: Invalid number of passengers", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(!s.toString().isEmpty()) trip.setPassengers(Integer.parseInt(s.toString()));
-                isValidTrip(trip);
-            }
-        });
+//        passengers.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                try {
+//                    trip.setPassengers(Integer.parseInt(s.toString()));
+//                    isValidTrip(trip);
+//                } catch (NumberFormatException e) {
+//                    Toast.makeText(getActivity(), "Error: Invalid number of passengers", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                if(!s.toString().isEmpty()) trip.setPassengers(Integer.parseInt(s.toString()));
+//                isValidTrip(trip);
+//            }
+//        });
 
         // Add a TextChangedListener to fetch suggestions as the user types
         sourceEditText.addTextChangedListener(new TextWatcher() {

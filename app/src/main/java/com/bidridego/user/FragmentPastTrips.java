@@ -53,7 +53,7 @@ public class FragmentPastTrips extends Fragment {
             throw new RuntimeException(e);
         }
 
-        databaseReferenceToTrips.orderByChild("dateAndTime").endAt(filterDate).addValueEventListener(new ValueEventListener() {
+        databaseReferenceToTrips.orderByChild("dateAndTime").startAt(filterDate).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 tripArrayList.clear();

@@ -73,10 +73,9 @@ public class HomeActivity extends AppCompatActivity {
                     Log.e("FirebaseError", "Error getting user's role: " + databaseError.getMessage());
                 }
             });
+        } else {
+            startActivity(new Intent(this, LoginActivity.class));
         }
-//        else {
-//            startActivity(new Intent(this, LoginActivity.class));
-//        }
     }
 
     private void saveUserDataToLocalPreferences(String role) {
