@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2B005C">
+    android:background="#441972">
     <ImageView
         android:id="@+id/banner"
         android:layout_width="match_parent"
@@ -41,11 +42,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_menu_camera" />
+                    android:src="@drawable/email"/>
 
                 <EditText
                     android:id="@+id/email"
                     style="@style/editText"
+                    android:inputType="textEmailAddress"
                     android:hint="@string/emailAddress" />
             </LinearLayout>
 
@@ -60,12 +62,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_menu_camera" />
+                    android:src="@drawable/password"/>
 
                 <EditText
                     android:id="@+id/password"
                     style="@style/editText"
-                    android:hint="@string/password" />
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
             </LinearLayout>
 
             <Button
@@ -74,10 +77,12 @@
                 style="@style/button" />
 
             <Button
+                android:id="@+id/forgotPassword"
                 style="@style/button"
+                android:layout_marginTop="0dp"
                 android:text="@string/forgotPassword"
-                android:background="@color/golden"
-                android:layout_marginTop="0dp"/>
+                android:textColor="@color/blue"
+                app:backgroundTint="@color/golden" />
         </LinearLayout>
 
     </LinearLayout>
