@@ -1,0 +1,14 @@
+change auth and dependencies to ur acc
+go through proj to understand the entire codebase
+set up ci/cd pipelines along with testing
+set up backend so that spring boot, docker and kubernetes can be used
+hosting would be done on firebase (we can use aws but we would use aws in cryptx project)
+
+will also make a website for it using angular
+
+frontend react/angular
+graphql, test out diff types of dbs
+
+for ml: genai, finetune a llm, use cpp for ml
+for big data: hadoop, ...
+for ww3: ...
